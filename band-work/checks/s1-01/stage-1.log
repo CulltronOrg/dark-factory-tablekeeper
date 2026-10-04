@@ -1,0 +1,832 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_1 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --harness-summary /workspace/band-work/checks/s1-01/stage-1.counts.json
+
+............FFFFF.................FFFFF.FFFFFFFFF...FF.............FFFFFFFFF........F...........FFFFFFF.FFF.........F...                                                                         [100%]
+=============================================================================================== FAILURES ===============================================================================================
+______________________________________________________________________________ test_starts_at_carries_an_explicit_offset _______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2ccaa780>, bob=<harness.http.Api object at 0x7fdc2bfc6ba0>)
+book = <function book.<locals>._book at 0x7fdc2beccea0>
+
+    def test_starts_at_carries_an_explicit_offset(world, book):
+        """Timestamps are RFC 3339 with an explicit offset (§3.4)."""
+        body = book(at="19:00").json()
+        for field in ("starts_at", "ends_at", "created_at"):
+>           assert re.search(r"([+-]\d{2}:\d{2}|Z)$", body[field]), \
+                                                      ^^^^^^^^^^^
+                f"{field} = {body[field]!r}"
+E           KeyError: 'starts_at'
+
+tablekeeper/test/stage_1/test_reservations.py:18: KeyError
+______________________________________________________________________________________ test_references_are_unique ______________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bed7380>, bob=<harness.http.Api object at 0x7fdc2bed6870>)
+book = <function book.<locals>._book at 0x7fdc2beccd60>
+
+    def test_references_are_unique(world, book):
+>       refs = {book(table_id=t, at="19:00", party_size=2).json()["reference"]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                for t in ("t_1", "t_2", "t_3")}
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:23: KeyError
+_______________________________________________________________________ test_overlapping_interval_is_409_not_only_the_same_slot ________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bed4590>, bob=<harness.http.Api object at 0x7fdc2bed4b30>)
+book = <function book.<locals>._book at 0x7fdc2becd120>
+
+    def test_overlapping_interval_is_409_not_only_the_same_slot(world, book):
+        """The invariant is about intervals, not slot equality."""
+>       assert_status(book(table_id="t_2", at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_reservations.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+____________________________________________________________________________ test_adjacent_non_overlapping_booking_succeeds ____________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2c0c31d0>, bob=<harness.http.Api object at 0x7fdc2bed4cb0>)
+book = <function book.<locals>._book at 0x7fdc2becc5e0>
+
+    def test_adjacent_non_overlapping_booking_succeeds(world, book):
+>       assert_status(book(table_id="t_2", at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_reservations.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+___________________________________________________________________________ test_a_different_table_at_the_same_time_succeeds ___________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bfc4290>, bob=<harness.http.Api object at 0x7fdc2c33f1a0>)
+book = <function book.<locals>._book at 0x7fdc2becc860>
+
+    def test_a_different_table_at_the_same_time_succeeds(world, book):
+>       assert_status(book(table_id="t_2", at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_reservations.py:40: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+_________________________________________________________________________________ test_unknown_body_fields_are_ignored _________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2c51e420>, bob=<harness.http.Api object at 0x7fdc2bf0d880>)
+book = <function book.<locals>._book at 0x7fdc2be77e20>
+
+    def test_unknown_body_fields_are_ignored(world, book):
+>       assert_status(book(souvenir="yes", table_id="t_2"), 201)
+
+tablekeeper/test/stage_1/test_reservations.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+___________________________________________________________________________ test_list_returns_only_the_callers_reservations ____________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf0ecc0>, bob=<harness.http.Api object at 0x7fdc2bf0f800>)
+book = <function book.<locals>._book at 0x7fdc2becf420>
+
+    def test_list_returns_only_the_callers_reservations(world, book):
+>       assert_status(book(world.ada, table_id="t_2", at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_reservations.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+__________________________________________________________________________________ test_list_is_starts_at_descending ___________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf0fe00>, bob=<harness.http.Api object at 0x7fdc2c3411c0>)
+book = <function book.<locals>._book at 0x7fdc2beced40>
+
+    def test_list_is_starts_at_descending(world, book):
+        for at in ("18:00", "21:00", "19:30"):
+>           assert_status(book(table_id="t_2", at=at), 201)
+
+tablekeeper/test/stage_1/test_reservations.py:116: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+_____________________________________________________________________________________ test_list_includes_cancelled _____________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf0e510>, bob=<harness.http.Api object at 0x7fdc2bf2ba70>)
+book = <function book.<locals>._book at 0x7fdc2becc860>
+
+    def test_list_includes_cancelled(world, book):
+>       ref = book(at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:122: KeyError
+___________________________________________________________________________ test_other_peoples_reservations_are_404_not_403 ____________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf29250>, bob=<harness.http.Api object at 0x7fdc2bf0e690>)
+book = <function book.<locals>._book at 0x7fdc2becdb20>
+
+    def test_other_peoples_reservations_are_404_not_403(world, book):
+        """Do not leak the existence of someone else's booking."""
+>       ref = book(world.ada, at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:130: KeyError
+________________________________________________________________________________ test_cancelling_twice_is_not_an_error _________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bfc7d70>, bob=<harness.http.Api object at 0x7fdc2bed6570>)
+book = <function book.<locals>._book at 0x7fdc2becf920>
+
+    def test_cancelling_twice_is_not_an_error(world, book):
+>       ref = book(at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:142: KeyError
+___________________________________________________________________________ test_cancelling_someone_elses_reservation_is_404 ___________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bed6720>, bob=<harness.http.Api object at 0x7fdc2c13bda0>)
+book = <function book.<locals>._book at 0x7fdc2becf740>
+
+    def test_cancelling_someone_elses_reservation_is_404(world, book):
+>       ref = book(world.ada, at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:149: KeyError
+_________________________________________________________________________________ test_cancel_inside_the_cutoff_is_409 _________________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7fdc2becef20>, api = <function api.<locals>._api at 0x7fdc2becf380>
+
+    def test_cancel_inside_the_cutoff_is_409(reset, api):
+        """cancellation_cutoff_minutes is measured from now to starts_at."""
+        # A cutoff wide enough that a booking a week out is still inside it.
+        cutoff = fx.restaurant(cancellation_cutoff_minutes=60 * 24 * 3650)
+        reset(fx.fixture(restaurants=[cutoff]))
+        ada = api().authenticate(fx.ADA["email"], fx.ADA["password"])
+        date = fx.booking_date()
+>       ref = ada.post("/reservations", json={
+            "restaurant_id": "r_anker", "table_id": "t_2",
+            "starts_at_local": fx.local(date, "19:00"), "party_size": 4},
+            idempotency_key=new_key()).json()["reference"]
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:160: KeyError
+__________________________________________________________________________________ test_patch_keeps_reference_and_id ___________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bed4680>, bob=<harness.http.Api object at 0x7fdc2c0c31a0>)
+book = <function book.<locals>._book at 0x7fdc2bf44360>
+
+    def test_patch_keeps_reference_and_id(world, book):
+        created = book(at="19:00").json()
+>       body = world.ada.patch(f"/reservations/{created['reference']}",
+                                                ^^^^^^^^^^^^^^^^^^^^
+                               json={"starts_at_local": fx.local(world.date, "20:30")}).json()
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:172: KeyError
+_________________________________________________________________________________ test_patch_needs_no_idempotency_key __________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2c0c27e0>, bob=<harness.http.Api object at 0x7fdc2bed5580>)
+book = <function book.<locals>._book at 0x7fdc2becf7e0>
+
+    def test_patch_needs_no_idempotency_key(world, book):
+>       ref = book(at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:179: KeyError
+_________________________________________________________________________________ test_patch_validation_matches_create _________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bed4350>, bob=<harness.http.Api object at 0x7fdc2bed5b80>)
+book = <function book.<locals>._book at 0x7fdc2becf2e0>
+
+    def test_patch_validation_matches_create(world, book):
+>       ref = book(table_id="t_2", at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:184: KeyError
+_________________________________________________________________________________ test_patch_onto_a_taken_table_is_409 _________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2c0c2420>, bob=<harness.http.Api object at 0x7fdc2c13b950>)
+book = <function book.<locals>._book at 0x7fdc2becde40>
+
+    def test_patch_onto_a_taken_table_is_409(world, book):
+>       assert_status(book(table_id="t_3", at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_reservations.py:195: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+______________________________________________________________________________ test_patch_a_cancelled_reservation_is_409 _______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bed71a0>, bob=<harness.http.Api object at 0x7fdc2bfc78f0>)
+book = <function book.<locals>._book at 0x7fdc2becd440>
+
+    def test_patch_a_cancelled_reservation_is_409(world, book):
+>       ref = book(at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:202: KeyError
+_____________________________________________________________________________ test_patch_someone_elses_reservation_is_404 ______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bfc91f0>, bob=<harness.http.Api object at 0x7fdc2bfc93a0>)
+book = <function book.<locals>._book at 0x7fdc2beccf40>
+
+    def test_patch_someone_elses_reservation_is_404(world, book):
+>       ref = book(world.ada, at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_reservations.py:209: KeyError
+_____________________________________________________________________ test_booked_table_leaves_the_slot_and_every_overlapping_one ______________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf29a60>, bob=<harness.http.Api object at 0x7fdc2bf0c680>)
+book = <function book.<locals>._book at 0x7fdc2bf447c0>, anon = <harness.http.Api object at 0x7fdc2bfc8230>
+
+    def test_booked_table_leaves_the_slot_and_every_overlapping_one(world, book, anon):
+        """Duration is 90 minutes on a 30-minute grid, so one booking covers three slots."""
+>       assert_status(book(table_id="t_2", at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_restaurants_availability.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+______________________________________________________________________________ test_slot_with_no_free_table_still_appears ______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf0f9e0>, bob=<harness.http.Api object at 0x7fdc2bf0f980>)
+book = <function book.<locals>._book at 0x7fdc2bf442c0>, anon = <harness.http.Api object at 0x7fdc2bef1bb0>
+
+    def test_slot_with_no_free_table_still_appears(world, book, anon):
+        for table in ("t_2", "t_3"):
+>           assert_status(book(table_id=table, at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_restaurants_availability.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+_____________________________________________________________________ test_replay_after_cancel_returns_the_original_confirmed_body _____________________________________________________________________
+
+ada = <harness.http.Api object at 0x7fdc2bfc58e0>
+
+    def test_replay_after_cancel_returns_the_original_confirmed_body(ada):
+        date = fx.booking_date()
+        key = new_key()
+>       first = assert_status(ada.post("/reservations", json={
+            "restaurant_id": "r_anker", "table_id": "t_2",
+            "starts_at_local": fx.local(date, "19:00"), "party_size": 4},
+            idempotency_key=key), 201).json()
+
+tablekeeper/test/stage_1/test_retries_time_input.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+______________________________________________________________________________ test_same_key_changed_party_size_is_reuse _______________________________________________________________________________
+
+ada = <harness.http.Api object at 0x7fdc2bed7590>
+
+    def test_same_key_changed_party_size_is_reuse(ada):
+        date = fx.booking_date()
+        key = new_key()
+        body = {"restaurant_id": "r_anker", "table_id": "t_2",
+                "starts_at_local": fx.local(date, "19:00"), "party_size": 4}
+>       assert_status(ada.post("/reservations", json=body, idempotency_key=key), 201)
+
+tablekeeper/test/stage_1/test_retries_time_input.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+__________________________________________________________________________ test_same_key_from_another_account_books_normally ___________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7fdc2bece480>, api = <function api.<locals>._api at 0x7fdc2becf920>, base_url = 'http://127.0.0.1:8080'
+
+    def test_same_key_from_another_account_books_normally(reset, api, base_url):
+        reset(fx.fixture())
+        date = fx.booking_date()
+        key = "a-shared-key"
+        ada = api().authenticate(fx.ADA["email"], fx.ADA["password"])
+        bob = api().authenticate(fx.BOB["email"], fx.BOB["password"])
+>       assert_status(ada.post("/reservations", json={
+            "restaurant_id": "r_anker", "table_id": "t_2",
+            "starts_at_local": fx.local(date, "19:00"), "party_size": 4},
+            idempotency_key=key), 201)
+
+tablekeeper/test/stage_1/test_retries_time_input.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+____________________________________________________________________________ test_booking_a_skipped_local_time_is_rejected _____________________________________________________________________________
+
+zoned = <function zoned.<locals>._make at 0x7fdc2bf45760>
+
+    def test_booking_a_skipped_local_time_is_rejected(zoned):
+>       ada = zoned()
+              ^^^^^^^
+
+tablekeeper/test/stage_1/test_retries_time_input.py:96: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_1/test_retries_time_input.py:83: in _make
+    reset(fx.fixture(restaurants=[berlin, newyork]))
+harness/plugin.py:108: in _reset
+    assert_status(resp, 204)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [422 Unprocessable Entity]>, expected = 204
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"validation_failed","message":"A table is invalid"}}'
+
+harness/http.py:108: AssertionError
+______________________________________________________________________________ test_fall_back_repeated_hour_appears_once _______________________________________________________________________________
+
+zoned = <function zoned.<locals>._make at 0x7fdc2becdb20>, anon = <harness.http.Api object at 0x7fdc2bf0e000>
+
+    def test_fall_back_repeated_hour_appears_once(zoned, anon):
+>       zoned()
+
+tablekeeper/test/stage_1/test_retries_time_input.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_1/test_retries_time_input.py:83: in _make
+    reset(fx.fixture(restaurants=[berlin, newyork]))
+harness/plugin.py:108: in _reset
+    assert_status(resp, 204)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [422 Unprocessable Entity]>, expected = 204
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"validation_failed","message":"A table is invalid"}}'
+
+harness/http.py:108: AssertionError
+___________________________________________________________________________ test_fall_back_resolves_to_the_first_occurrence ____________________________________________________________________________
+
+zoned = <function zoned.<locals>._make at 0x7fdc2becef20>
+
+    def test_fall_back_resolves_to_the_first_occurrence(zoned):
+        """02:00 on a fall-back night is the one before the clocks change: +02:00."""
+>       ada = zoned()
+              ^^^^^^^
+
+tablekeeper/test/stage_1/test_retries_time_input.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_1/test_retries_time_input.py:83: in _make
+    reset(fx.fixture(restaurants=[berlin, newyork]))
+harness/plugin.py:108: in _reset
+    assert_status(resp, 204)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [422 Unprocessable Entity]>, expected = 204
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"validation_failed","message":"A table is invalid"}}'
+
+harness/http.py:108: AssertionError
+____________________________________________________________________________ test_duration_is_absolute_time_not_wall_clock _____________________________________________________________________________
+
+zoned = <function zoned.<locals>._make at 0x7fdc2bf45580>
+
+    def test_duration_is_absolute_time_not_wall_clock(zoned):
+        """90 minutes from 01:30 on a fall-back night ends at local 02:00, not 03:00."""
+>       ada = zoned()
+              ^^^^^^^
+
+tablekeeper/test/stage_1/test_retries_time_input.py:124: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_1/test_retries_time_input.py:83: in _make
+    reset(fx.fixture(restaurants=[berlin, newyork]))
+harness/plugin.py:108: in _reset
+    assert_status(resp, 204)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [422 Unprocessable Entity]>, expected = 204
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"validation_failed","message":"A table is invalid"}}'
+
+harness/http.py:108: AssertionError
+___________________________________________________________________ test_two_zones_book_the_same_instant_from_different_local_times ____________________________________________________________________
+
+zoned = <function zoned.<locals>._make at 0x7fdc2bf44ea0>
+
+    def test_two_zones_book_the_same_instant_from_different_local_times(zoned):
+        """Berlin 18:00 CET and New York 12:00 EST are the same absolute moment."""
+>       ada = zoned()
+              ^^^^^^^
+
+tablekeeper/test/stage_1/test_retries_time_input.py:135: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_1/test_retries_time_input.py:83: in _make
+    reset(fx.fixture(restaurants=[berlin, newyork]))
+harness/plugin.py:108: in _reset
+    assert_status(resp, 204)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [422 Unprocessable Entity]>, expected = 204
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"validation_failed","message":"A table is invalid"}}'
+
+harness/http.py:108: AssertionError
+________________________________________________________________________ test_offsets_are_correct_on_both_sides_of_a_transition ________________________________________________________________________
+
+zoned = <function zoned.<locals>._make at 0x7fdc2becdb20>
+
+    def test_offsets_are_correct_on_both_sides_of_a_transition(zoned):
+>       ada = zoned()
+              ^^^^^^^
+
+tablekeeper/test/stage_1/test_retries_time_input.py:149: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_1/test_retries_time_input.py:83: in _make
+    reset(fx.fixture(restaurants=[berlin, newyork]))
+harness/plugin.py:108: in _reset
+    assert_status(resp, 204)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [422 Unprocessable Entity]>, expected = 204
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"validation_failed","message":"A table is invalid"}}'
+
+harness/http.py:108: AssertionError
+_________________________________________________________________________________ test_someone_elses_reference_is_404 __________________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7fdc2bf442c0>, api = <function api.<locals>._api at 0x7fdc2bf44680>
+
+    def test_someone_elses_reference_is_404(reset, api):
+        reset(fx.fixture())
+        ada = api().authenticate(fx.ADA["email"], fx.ADA["password"])
+        bob = api().authenticate(fx.BOB["email"], fx.BOB["password"])
+>       ref = _book(ada, fx.booking_date()).json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_retries_time_input.py:188: KeyError
+_______________________________________________________________________________ test_create_returns_the_documented_shape _______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf0fa40>, bob=<harness.http.Api object at 0x7fdc2bed6090>)
+book = <function book.<locals>._book at 0x7fdc2bf45ee0>
+
+    def test_create_returns_the_documented_shape(world, book):
+>       body = assert_status(book(table_id="t_2", at="19:00", party_size=4), 201).json()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tablekeeper/test/stage_1/test_sample.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+_________________________________________________________________________________ test_ends_at_is_start_plus_duration __________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bef8590>, bob=<harness.http.Api object at 0x7fdc2bef90d0>)
+book = <function book.<locals>._book at 0x7fdc2bf46480>
+
+    def test_ends_at_is_start_plus_duration(world, book):
+        body = book(at="19:00").json()
+>       assert body["starts_at"].startswith(f"{world.date}T19:00:00")
+               ^^^^^^^^^^^^^^^^^
+E       KeyError: 'starts_at'
+
+tablekeeper/test/stage_1/test_sample.py:102: KeyError
+______________________________________________________________________________ test_double_booking_the_same_table_is_409 _______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bef0f20>, bob=<harness.http.Api object at 0x7fdc2bfc7260>)
+book = <function book.<locals>._book at 0x7fdc2bf440e0>
+
+    def test_double_booking_the_same_table_is_409(world, book):
+>       assert_status(book(table_id="t_2", at="19:00"), 201)
+
+tablekeeper/test/stage_1/test_sample.py:107: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+________________________________________________________________________________________ test_read_by_reference ________________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2befaab0>, bob=<harness.http.Api object at 0x7fdc2befacc0>)
+book = <function book.<locals>._book at 0x7fdc2bf465c0>
+
+    def test_read_by_reference(world, book):
+>       ref = book(at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_sample.py:112: KeyError
+_____________________________________________________________________________ test_cancel_sets_status_and_frees_the_table ______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bcab3b0>, bob=<harness.http.Api object at 0x7fdc2bfca0c0>)
+book = <function book.<locals>._book at 0x7fdc2bf45580>, anon = <harness.http.Api object at 0x7fdc2bf2d190>
+
+    def test_cancel_sets_status_and_frees_the_table(world, book, anon):
+>       ref = book(table_id="t_2", at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_sample.py:117: KeyError
+__________________________________________________________________________ test_patch_changes_the_table_and_frees_the_old_one __________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf2e570>, bob=<harness.http.Api object at 0x7fdc2bf2d370>)
+book = <function book.<locals>._book at 0x7fdc2bf47100>, anon = <harness.http.Api object at 0x7fdc2bf0fb90>
+
+    def test_patch_changes_the_table_and_frees_the_old_one(world, book, anon):
+>       ref = book(table_id="t_2", at="19:00").json()["reference"]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_sample.py:127: KeyError
+________________________________________________________________________ test_first_use_is_201_replay_is_200_with_the_same_body ________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2c0c3b00>, bob=<harness.http.Api object at 0x7fdc2bf0d490>)
+book = <function book.<locals>._book at 0x7fdc2bf47600>
+
+    def test_first_use_is_201_replay_is_200_with_the_same_body(world, book):
+        key = new_key()
+>       first = assert_status(book(key=key, table_id="t_2", at="19:00"), 201).json()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tablekeeper/test/stage_1/test_sample.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+___________________________________________________________________________________ test_one_slot_under_ten_clients ____________________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7fdc2bf47560>, base_url = 'http://127.0.0.1:8080'
+
+    def test_one_slot_under_ten_clients(reset, base_url):
+        """Ten accounts race for one table and one slot: exactly one 201.
+    
+        The shape once. The graded run uses the §2 budget of 50 in flight, and asks the
+        same of cancel-and-rebook, of a PATCH onto one free table, and of a key replayed
+        by twenty clients at once.
+        """
+        users = [dict(fx.ADA, id=f"u_{i}", email=f"r{i}@example.com") for i in range(10)]
+        reset(fx.fixture(users=users))
+        date = fx.booking_date()
+        crowd = [Api(base_url).authenticate(u["email"], u["password"]) for u in users]
+        body = {"restaurant_id": "r_anker", "table_id": "t_2",
+                "starts_at_local": fx.local(date, "19:00"), "party_size": 4}
+        try:
+            out = burst(lambda i: crowd[i].post(
+                "/reservations", json=body, idempotency_key=new_key()), 10)
+        finally:
+            for client in crowd:
+                client.close()
+>       no_5xx(out)
+
+tablekeeper/test/stage_1/test_sample.py:173: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+responses = [<Response [500 Internal Server Error]>, <Response [500 Internal Server Error]>, <Response [500 Internal Server Error]...onse [500 Internal Server Error]>, <Response [500 Internal Server Error]>, <Response [500 Internal Server Error]>, ...]
+
+    def no_5xx(responses) -> None:
+        bad = [r for r in responses if getattr(r, "status_code", 0) >= 500]
+        errors = [r for r in responses if isinstance(r, Exception)]
+>       assert not bad and not errors, (
+               ^^^^^^^^^^^^^^^^^^^^^^
+            f"5xx or transport errors under load: {tally(responses)}; "
+            f"first error: {errors[0] if errors else bad[0].text[:200]}")
+E       AssertionError: 5xx or transport errors under load: {500: 10}; first error: {"error":{"code":"internal","message":"The service failed while handling the request"}}
+
+harness/concurrent.py:60: AssertionError
+__________________________________________________________________________________ test_export_can_restore_a_booking ___________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bf29d60>, bob=<harness.http.Api object at 0x7fdc2bf28680>)
+book = <function book.<locals>._book at 0x7fdc2bf467a0>, reset = <function reset.<locals>._reset at 0x7fdc2bf47e20>
+
+    def test_export_can_restore_a_booking(world, book, reset):
+        receipt = book().json()
+        snapshot = world.ada.get('/_test/export')
+        assert snapshot.status_code == 200
+        reset(world.fixture)
+        restored = world.ada.post('/_test/import', json=snapshot.json())
+        assert restored.status_code == 204
+>       assert world.ada.get('/reservations/' + receipt['reference']).json() == receipt
+                                                ^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_1/test_sample.py:186: KeyError
+______________________________________________________________________________ test_a_move_batch_of_one_moves_the_booking ______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7fdc2bcf1d90>, bob=<harness.http.Api object at 0x7fdc2bfcb1d0>)
+book = <function book.<locals>._book at 0x7fdc2bf46ca0>
+
+    def test_a_move_batch_of_one_moves_the_booking(world, book):
+>       booking = assert_status(book(table_id='t_1', party_size=2), 201).json()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tablekeeper/test/stage_1/test_sample.py:190: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+______________________________________________________________________________ test_changing_inside_the_cutoff_is_refused ______________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7fdc2bf45da0>, api = <function api.<locals>._api at 0x7fdc2bf471a0>
+
+    def test_changing_inside_the_cutoff_is_refused(reset, api):
+        """§8: `PATCH` carries the same cutoff rule as cancel, against the current start."""
+        cutoff = fx.restaurant(cancellation_cutoff_minutes=60 * 24 * 3650)
+        reset(fx.fixture(restaurants=[cutoff]))
+        ada = api().authenticate(fx.ADA["email"], fx.ADA["password"])
+        date = fx.booking_date()
+>       ref = assert_status(ada.post("/reservations", json={
+            "restaurant_id": "r_anker", "table_id": "t_2",
+            "starts_at_local": fx.local(date, "19:00"), "party_size": 4},
+            idempotency_key=new_key()), 201).json()["reference"]
+
+tablekeeper/test/stage_1/test_seeded_state.py:93: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+======================================================================================= short test summary info ========================================================================================
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_starts_at_carries_an_explicit_offset - KeyError: 'starts_at'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_references_are_unique - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_overlapping_interval_is_409_not_only_the_same_slot - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"i...
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_adjacent_non_overlapping_booking_succeeds - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal",...
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_a_different_table_at_the_same_time_succeeds - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal...
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_unknown_body_fields_are_ignored - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":...
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_list_returns_only_the_callers_reservations - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal"...
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_list_is_starts_at_descending - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"Th...
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_list_includes_cancelled - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_other_peoples_reservations_are_404_not_403 - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_cancelling_twice_is_not_an_error - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_cancelling_someone_elses_reservation_is_404 - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_cancel_inside_the_cutoff_is_409 - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_patch_keeps_reference_and_id - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_patch_needs_no_idempotency_key - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_patch_validation_matches_create - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_patch_onto_a_taken_table_is_409 - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":...
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_patch_a_cancelled_reservation_is_409 - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_patch_someone_elses_reservation_is_404 - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_restaurants_availability.py::test_booked_table_leaves_the_slot_and_every_overlapping_one - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"e...
+FAILED tablekeeper/test/stage_1/test_restaurants_availability.py::test_slot_with_no_free_table_still_appears - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"in...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_replay_after_cancel_returns_the_original_confirmed_body - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error"...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_same_key_changed_party_size_is_reuse - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal"...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_same_key_from_another_account_books_normally - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"i...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_booking_a_skipped_local_time_is_rejected - AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"valida...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_fall_back_repeated_hour_appears_once - AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"validation...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_fall_back_resolves_to_the_first_occurrence - AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"vali...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_duration_is_absolute_time_not_wall_clock - AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code":"valida...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_two_zones_book_the_same_instant_from_different_local_times - AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"erro...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_offsets_are_correct_on_both_sides_of_a_transition - AssertionError: expected 204, got 422. POST /_test/reset -> 422 '{"error":{"code...
+FAILED tablekeeper/test/stage_1/test_retries_time_input.py::test_someone_elses_reference_is_404 - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_sample.py::test_create_returns_the_documented_shape - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"T...
+FAILED tablekeeper/test/stage_1/test_sample.py::test_ends_at_is_start_plus_duration - KeyError: 'starts_at'
+FAILED tablekeeper/test/stage_1/test_sample.py::test_double_booking_the_same_table_is_409 - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"...
+FAILED tablekeeper/test/stage_1/test_sample.py::test_read_by_reference - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_sample.py::test_cancel_sets_status_and_frees_the_table - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_sample.py::test_patch_changes_the_table_and_frees_the_old_one - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_sample.py::test_first_use_is_201_replay_is_200_with_the_same_body - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal...
+FAILED tablekeeper/test/stage_1/test_sample.py::test_one_slot_under_ten_clients - AssertionError: 5xx or transport errors under load: {500: 10}; first error: {"error":{"code":"internal","message":"...
+FAILED tablekeeper/test/stage_1/test_sample.py::test_export_can_restore_a_booking - KeyError: 'reference'
+FAILED tablekeeper/test/stage_1/test_sample.py::test_a_move_batch_of_one_moves_the_booking - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":...
+FAILED tablekeeper/test/stage_1/test_seeded_state.py::test_changing_inside_the_cutoff_is_refused - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","mes...
+42 failed, 78 passed in 20.21s
+

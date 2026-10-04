@@ -1,0 +1,5 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_2 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --previous-base-url http://127.0.0.1:8083 --harness-summary /workspace/dark-factory-tablekeeper/band-work/checks/after-edges-s4/stage-2.counts.json
+
+.........................                                                                                                                                                                        [100%]
+25 passed in 19.61s
+

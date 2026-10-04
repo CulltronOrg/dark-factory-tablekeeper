@@ -1,0 +1,1286 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_2 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --harness-summary /workspace/band-work/checks/s234-01/stage-2.counts.json
+
+EEEEEEE.EEEEEEEEEEEEEEEEE                                                                                                                                                                        [100%]
+================================================================================================ ERRORS ================================================================================================
+________________________________________________________________ ERROR at setup of test_routes_are_directly_navigable[/-search-button] _________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+_____________________________________________________________ ERROR at setup of test_routes_are_directly_navigable[/signup-signup-submit] ______________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+______________________________________________________________ ERROR at setup of test_routes_are_directly_navigable[/login-login-submit] _______________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+_____________________________________________________________ ERROR at setup of test_routes_are_directly_navigable[/lookup-lookup-submit] ______________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+__________________________________________________________________ ERROR at setup of test_login_signs_you_in_and_logout_signs_you_out __________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+______________________________________________________________________ ERROR at setup of test_booking_flow_reaches_a_confirmation ______________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+____________________________________________________________________ ERROR at setup of test_preceding_stage_accounts_survive_import ____________________________________________________________________
+
+request = <SubRequest 'previous_api' for <Function test_preceding_stage_accounts_survive_import>>
+
+    @pytest.fixture
+    def previous_api(request):
+        url = request.config.getoption('--previous-base-url')
+        if not url:
+>           pytest.fail('upgrade checks require the preceding stage: use harness run --repo '
+                        '--stage N, or supply --previous-base-url for development')
+E           Failed: upgrade checks require the preceding stage: use harness run --repo --stage N, or supply --previous-base-url for development
+
+harness/plugin.py:138: Failed
+______________________________________________________________________________ ERROR at setup of test_signup_signs_you_in ______________________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+__________________________________________________________________________ ERROR at setup of test_bad_login_shows_auth_error ___________________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+____________________________________________________________________ ERROR at setup of test_auth_error_is_absent_when_there_is_none ____________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+_____________________________________________________________________ ERROR at setup of test_grid_shows_a_cell_per_table_per_slot ______________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+__________________________________________________________________________ ERROR at setup of test_cells_carry_data_available ___________________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+___________________________________________________________________________ ERROR at setup of test_closed_day_shows_no_slots ___________________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+___________________________________________________________________ ERROR at setup of test_clicking_an_unavailable_cell_does_nothing ___________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+__________________________________________________________ ERROR at setup of test_booking_while_signed_out_shows_auth_error_or_goes_to_login ___________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+________________________________________________________________ ERROR at setup of test_a_booked_slot_is_unavailable_on_the_next_search ________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+_________________________________________________________________ ERROR at setup of test_booking_error_is_shown_when_the_booking_fails _________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+_________________________________________________________________________ ERROR at setup of test_lookup_shows_the_reservation __________________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+______________________________________________________________ ERROR at setup of test_cancel_from_lookup_updates_without_a_manual_reload _______________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+___________________________________________________________________________ ERROR at setup of test_cancelling_frees_the_slot ___________________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+___________________________________________________________________ ERROR at setup of test_unknown_reference_shows_reservation_error ___________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+_________________________________________________________________ ERROR at setup of test_submitting_the_booking_form_twice_books_once __________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+____________________________________________________________________ ERROR at setup of test_a_double_submit_leaves_one_reservation _____________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+________________________________________________________________ ERROR at setup of test_changing_the_form_first_is_a_different_booking _________________________________________________________________
+
+base_url = 'http://127.0.0.1:8080'
+
+    @pytest.fixture(scope="session")
+    def browser(base_url):
+        """One headless Chromium for the whole stage-2 run.
+    
+        Full Chromium, not the default headless shell, which ignores `browser_args`.
+        """
+        from playwright import sync_api as playwright
+        with playwright.sync_playwright() as driver:
+>           instance = driver.chromium.launch(channel="chromium", args=browser_args(base_url))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+harness/plugin.py:165: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:16814: in launch
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_browser_type.py:101: in launch
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9397df8da0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9397c15b20>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/chrome
+E           ╔════════════════════════════════════════════════════════════╗
+E           ║ Looks like Playwright was just installed or updated.       ║
+E           ║ Please run the following command to download new browsers: ║
+E           ║                                                            ║
+E           ║     playwright install                                     ║
+E           ║                                                            ║
+E           ║ <3 Playwright Team                                         ║
+E           ╚════════════════════════════════════════════════════════════╝
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: Error
+======================================================================================= short test summary info ========================================================================================
+ERROR tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/-search-button] - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers...
+ERROR tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/signup-signup-submit] - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-br...
+ERROR tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/login-login-submit] - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-brow...
+ERROR tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/lookup-lookup-submit] - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-br...
+ERROR tablekeeper/test/stage_2/test_sample.py::test_login_signs_you_in_and_logout_signs_you_out - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/ch...
+ERROR tablekeeper/test/stage_2/test_sample.py::test_booking_flow_reaches_a_confirmation - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1...
+ERROR tablekeeper/test/stage_2/test_sample.py::test_preceding_stage_accounts_survive_import - Failed: upgrade checks require the preceding stage: use harness run --repo --stage N, or supply --previ...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_signup_signs_you_in - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-linux64/c...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_bad_login_shows_auth_error - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-li...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_auth_error_is_absent_when_there_is_none - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_grid_shows_a_cell_per_table_per_slot - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_cells_carry_data_available - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-li...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_closed_day_shows_no_slots - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-lin...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_clicking_an_unavailable_cell_does_nothing - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_booking_while_signed_out_shows_auth_error_or_goes_to_login - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_a_booked_slot_is_unavailable_on_the_next_search - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/ch...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_booking_error_is_shown_when_the_booking_fails - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chro...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_lookup_shows_the_reservation - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_cancel_from_lookup_updates_without_a_manual_reload - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_cancelling_frees_the_slot - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-1243/chrome-lin...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_unknown_reference_shows_reservation_error - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_submitting_the_booking_form_twice_books_once - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chrom...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_a_double_submit_leaves_one_reservation - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chromium-12...
+ERROR tablekeeper/test/stage_2/test_ui.py::test_changing_the_form_first_is_a_different_booking - playwright._impl._errors.Error: BrowserType.launch: Executable doesn't exist at /opt/pw-browsers/chr...
+1 passed, 24 errors in 3.13s
+

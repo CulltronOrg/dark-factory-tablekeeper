@@ -1,0 +1,5 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_3 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --previous-base-url http://127.0.0.1:8083 --harness-summary /tmp/nightshift-rerun-20261004/stage-3.counts.json
+
+.......                                                                                                                                                                                          [100%]
+7 passed in 1.58s
+

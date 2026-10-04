@@ -1,0 +1,123 @@
+{
+  "revision": "",
+  "track": "tablekeeper",
+  "stages": {
+    "1": "pass",
+    "2": "pass",
+    "3": "pass",
+    "4": "pass"
+  },
+  "highest_contiguous": 4,
+  "started_at": "2026-10-04T01:13:13.787172+00:00",
+  "finished_at": "2026-10-04T01:14:04.608801+00:00",
+  "schema_version": 2,
+  "run_id": "a3fdae768a2d4f029f4941800d594d19",
+  "mode": "host",
+  "provenance": "external-url",
+  "state": "completed",
+  "pytest_args": [],
+  "suite_digest": "644c4bc3fcad0c4124cfc4f3fedb82d711ec301e2b288dd667c427ae147f2df1",
+  "checks": {
+    "1": {
+      "collected": 120,
+      "passed": 120,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_1/test_health_reset_auth.py": {
+          "passed": 12,
+          "total": 12
+        },
+        "stage_1/test_reservations.py": {
+          "passed": 37,
+          "total": 37
+        },
+        "stage_1/test_restaurants_availability.py": {
+          "passed": 18,
+          "total": 18
+        },
+        "stage_1/test_retries_time_input.py": {
+          "passed": 20,
+          "total": 20
+        },
+        "stage_1/test_sample.py": {
+          "passed": 20,
+          "total": 20
+        },
+        "stage_1/test_seeded_state.py": {
+          "passed": 13,
+          "total": 13
+        }
+      }
+    },
+    "2": {
+      "collected": 25,
+      "passed": 25,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_2/test_sample.py": {
+          "passed": 8,
+          "total": 8
+        },
+        "stage_2/test_ui.py": {
+          "passed": 17,
+          "total": 17
+        }
+      }
+    },
+    "3": {
+      "collected": 7,
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_3/test_sample.py": {
+          "passed": 7,
+          "total": 7
+        }
+      }
+    },
+    "4": {
+      "collected": 6,
+      "passed": 6,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_4/test_sample.py": {
+          "passed": 6,
+          "total": 6
+        }
+      }
+    }
+  },
+  "overshoot": null,
+  "claimed_stage": null,
+  "share": null,
+  "upgrade_sources": {
+    "2": {
+      "url": "http://127.0.0.1:8083",
+      "provenance": "external-url"
+    },
+    "3": {
+      "url": "http://127.0.0.1:8083",
+      "provenance": "external-url"
+    },
+    "4": {
+      "url": "http://127.0.0.1:8083",
+      "provenance": "external-url"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_2 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --harness-summary /workspace/band-work/checks/s4-ui-02/stage-2.counts.json
+
+......E..................                                                                                                                                                                        [100%]
+================================================================================================ ERRORS ================================================================================================
+____________________________________________________________________ ERROR at setup of test_preceding_stage_accounts_survive_import ____________________________________________________________________
+
+request = <SubRequest 'previous_api' for <Function test_preceding_stage_accounts_survive_import>>
+
+    @pytest.fixture
+    def previous_api(request):
+        url = request.config.getoption('--previous-base-url')
+        if not url:
+>           pytest.fail('upgrade checks require the preceding stage: use harness run --repo '
+                        '--stage N, or supply --previous-base-url for development')
+E           Failed: upgrade checks require the preceding stage: use harness run --repo --stage N, or supply --previous-base-url for development
+
+harness/plugin.py:138: Failed
+======================================================================================= short test summary info ========================================================================================
+ERROR tablekeeper/test/stage_2/test_sample.py::test_preceding_stage_accounts_survive_import - Failed: upgrade checks require the preceding stage: use harness run --repo --stage N, or supply --previ...
+24 passed, 1 error in 18.26s
+

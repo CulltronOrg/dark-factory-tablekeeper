@@ -1,0 +1,74 @@
+{
+  "revision": "",
+  "track": "tablekeeper",
+  "stages": {
+    "2": "error",
+    "3": "pass",
+    "4": "pass"
+  },
+  "highest_contiguous": 0,
+  "started_at": "2026-10-03T12:20:54.813887+00:00",
+  "finished_at": "2026-10-03T12:21:00.849128+00:00",
+  "schema_version": 2,
+  "run_id": "af3b2808fa8d4acf8e1bf47a7caf046e",
+  "mode": "host",
+  "provenance": "external-url",
+  "state": "completed",
+  "pytest_args": [],
+  "suite_digest": "1e432f1afcb1af31dcfb1bda86c3f398325b22a0f55a0e81a08e9a809706b559",
+  "checks": {
+    "2": {
+      "collected": 25,
+      "passed": 1,
+      "failed": 0,
+      "errors": 24,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_2/test_sample.py": {
+          "passed": 1,
+          "total": 8
+        },
+        "stage_2/test_ui.py": {
+          "passed": 0,
+          "total": 17
+        }
+      }
+    },
+    "3": {
+      "collected": 7,
+      "passed": 7,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_3/test_sample.py": {
+          "passed": 7,
+          "total": 7
+        }
+      }
+    },
+    "4": {
+      "collected": 6,
+      "passed": 6,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_4/test_sample.py": {
+          "passed": 6,
+          "total": 6
+        }
+      }
+    }
+  },
+  "overshoot": null,
+  "claimed_stage": null,
+  "share": null,
+  "upgrade_sources": {}
+}

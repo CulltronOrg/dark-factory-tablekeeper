@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nightshift — a table, held</title>
+  <style>
+    :root {
+      --ink: #1c1612;
+      --paper: #f3eee6;
+      --card: #fbf7f1;
+      --line: #e2d6c8;
+      --muted: #5c5148;
+      --oxblood: #7c2f2a;
+      --oxblood-ink: #fff8f2;
+      --shadow: 0 18px 40px rgba(28, 22, 18, 0.08);
+      --serif: "Literata", Georgia, serif;
+      --sans: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
+    }
+    @font-face {
+      font-family: "Literata";
+      src: url("/fonts/literata-400.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Literata";
+      src: url("/fonts/literata-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Outfit";
+      src: url("/fonts/outfit-400.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Outfit";
+      src: url("/fonts/outfit-600.woff2") format("woff2");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgba(124, 47, 42, 0.08), transparent 50%),
+        var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    button, input, select { font: inherit; color: inherit; }
+    button, [role="button"] { cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
+    a { color: inherit; }
+    .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
+    header.top {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 22px 0 8px; flex-wrap: wrap;
+    }
+    .brand { text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 12px; }
+    .brand-text { display: flex; flex-direction: column; }
+    .mark { width: 36px; height: 36px; flex: none; }
+    .brand b { font-family: var(--serif); font-size: 28px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
+    .brand span { color: var(--muted); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
+    nav { display: flex; gap: 18px; align-items: center; }
+    nav a { text-decoration: none; font-size: 14px; letter-spacing: 0.04em; }
+    nav a[aria-current="page"] { box-shadow: inset 0 -1px 0 var(--ink); }
+    .who { display: flex; align-items: center; gap: 10px; }
+    #current-user, [data-testid="current-user"] {
+      font-family: var(--serif); font-size: 18px;
+    }
+    .ghost, .solid, .cell {
+      border: 1px solid var(--ink); background: transparent; min-height: 44px;
+      padding: 0 16px; border-radius: 999px;
+    }
+    .solid { background: var(--oxblood); color: var(--oxblood-ink); border-color: var(--oxblood); }
+    .solid:hover { background: #641f1c; }
+    main { padding: 12px 0 64px; }
+    .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: end; margin: 18px 0 22px; }
+    h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(40px, 6vw, 72px); letter-spacing: -0.045em; line-height: 0.92; margin: 0; }
+    .lede { color: var(--muted); max-width: 36ch; margin: 12px 0 0; }
+    .panel, .ticket, .auth-card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
+    }
+    .panel { padding: 16px; display: grid; gap: 12px; }
+    .fields { display: grid; grid-template-columns: 1.15fr 0.7fr auto; gap: 10px; align-items: end; }
+    .fields label:first-child { grid-column: 1 / -1; }
+    label { display: grid; gap: 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    input, select {
+      width: 100%; min-height: 44px; border-radius: 12px; border: 1px solid var(--line);
+      background: #fff; padding: 0 12px;
+    }
+    .status-line { min-height: 1.4em; color: var(--muted); font-size: 14px; }
+    .slot-block {
+      display: grid; grid-template-columns: 92px 1fr; gap: 12px; align-items: start;
+      margin: 0; padding: 16px 0; border-top: 1px solid var(--line);
+    }
+    .slot-block h2 { font-family: var(--serif); font-size: 32px; margin: 0; letter-spacing: -0.03em; line-height: 1; }
+    .cells { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cell { border-radius: 14px; text-align: left; background: #fff; min-width: min(100%, 168px); padding: 10px 12px; }
+    .cell small { display: block; color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+    .cell strong { font-family: var(--serif); font-size: 20px; font-weight: 700; }
+    .cell[data-available="true"] { box-shadow: inset 3px 0 0 var(--oxblood); }
+    .cell[data-available="false"] { color: #8d7f74; background: transparent; border-style: dashed; box-shadow: none; }
+    .cell.is-selected, .cell.is-selected[data-available="true"] {
+      background: var(--oxblood); color: var(--oxblood-ink); border-color: var(--oxblood); box-shadow: none;
+    }
+    .cell.is-selected small { color: #fff8f2; }
+    .combo[data-available="true"] { background: #f6efe4; }
+    #booking-form.ticket, .ticket { margin-top: 8px; padding: 20px 18px 16px; border-top: 6px solid var(--oxblood); }
+    #booking-summary { font-family: var(--serif); font-size: clamp(26px, 4vw, 34px); letter-spacing: -0.03em; line-height: 1.05; margin: 0 0 12px; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
+    .banner { margin-top: 12px; padding: 12px 14px; border-radius: 12px; }
+    .banner.bad { background: #f8e7e2; border: 1px solid #e2b2aa; color: #641f1c; }
+    .banner.unsure { background: #f4ead2; border: 1px solid #c4a15a; color: #3d3118; }
+    .banner.ok { background: #e7f2e4; border: 1px solid #8eae90; color: #1d3a22; }
+    .change-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .rules { margin: 0; color: var(--muted); font-size: 14px; }
+    .history { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
+    .history li { font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 6px; }
+    .ref {
+      font-family: var(--serif); font-size: clamp(28px, 8vw, 44px); letter-spacing: 0.08em;
+      margin: 0; overflow-wrap: anywhere;
+    }
+    .quiet { color: var(--muted); }
+    .auth-card { max-width: 460px; padding: 22px; display: grid; gap: 12px; }
+    .auth-card h1 { font-size: 48px; }
+    .empty {
+      padding: 28px 8px; color: var(--muted); font-family: var(--serif); font-size: 28px; letter-spacing: -0.03em;
+    }
+    .colophon { font-size: 18px; padding: 8px 0 36px; }
+    .status-line.is-loading { color: var(--ink); }
+    @media (max-width: 800px) {
+      .hero, .fields, .slot-block, .change-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 44px; }
+      .wrap { width: min(1080px, calc(100% - 24px)); }
+      .slot-block h2 { font-size: 28px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="/">
+        <svg class="mark" viewBox="0 0 36 36" aria-hidden="true">
+          <circle cx="18" cy="18" r="16.5" fill="none" stroke="#7c2f2a" stroke-width="1.5"/>
+          <path d="M11 23h14M13 23v-5.5a5 5 0 0 1 10 0V23" fill="none" stroke="#1c1612" stroke-width="1.5"/>
+        </svg>
+        <span class="brand-text"><b>Nightshift</b><span>Tables, held once</span></span>
+      </a>
+      <nav>
+        <a href="/" data-nav="/">Reserve</a>
+        <a href="/lookup" data-nav="/lookup">Reference</a>
+        <a href="/login" data-nav="/login" id="account-link">Enter</a>
+      </nav>
+      <div class="who" id="who"></div>
+    </header>
+    <main id="view"></main>
+    <footer class="empty colophon">A table is a promise. We keep one.</footer>
+  </div>
+  <script>
+    const path = location.pathname;
+    const view = document.getElementById("view");
+    const who = document.getElementById("who");
+    document.querySelectorAll("[data-nav]").forEach((a) => {
+      if (a.getAttribute("data-nav") === path) a.setAttribute("aria-current", "page");
+    });
+
+    function session() {
+      try { return JSON.parse(localStorage.getItem("nightshift.session") || "null"); }
+      catch { return null; }
+    }
+    function setSession(value) { localStorage.setItem("nightshift.session", JSON.stringify(value)); }
+    function clearSession() { localStorage.removeItem("nightshift.session"); }
+    function authHeaders() {
+      const s = session();
+      return s ? { authorization: "Bearer " + s.token } : {};
+    }
+    function paintWho() {
+      const s = session();
+      who.replaceChildren();
+      const account = document.getElementById("account-link");
+      if (!s) { account.textContent = "Enter"; account.href = "/login"; return; }
+      account.textContent = "Account";
+      const name = document.createElement("div");
+      name.dataset.testid = "current-user";
+      name.textContent = s.display_name;
+      const out = document.createElement("button");
+      out.type = "button";
+      out.className = "ghost";
+      out.dataset.testid = "logout-button";
+      out.textContent = "Log out";
+      out.addEventListener("click", () => { clearSession(); paintWho(); if (path === "/lookup") renderLookup(); });
+      who.append(name, out);
+    }
+    paintWho();
+
+    function field(id, testid, label, type, attrs) {
+      const wrap = document.createElement("label");
+      wrap.htmlFor = id;
+      wrap.textContent = label;
+      const input = document.createElement(type === "select" ? "select" : "input");
+      input.id = id;
+      if (type !== "select") input.type = type;
+      input.dataset.testid = testid;
+      Object.assign(input, attrs || {});
+      wrap.append(input);
+      return { wrap, input };
+    }
+
+    function banner(test, text, kind) {
+      const el = document.createElement("div");
+      el.dataset.testid = test;
+      el.className = "banner " + (kind || "bad");
+      el.textContent = text;
+      return el;
+    }
+
+    function weekdayOf(dateStr) {
+      const [y, m, d] = dateStr.split("-").map(Number);
+      return ["sun", "mon", "tue", "wed", "thu", "fri", "sat"][new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
+    }
+
+    function humanDate(dateStr) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr || "")) return dateStr || "";
+      const [y, m, d] = dateStr.split("-").map(Number);
+      return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-GB", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+      });
+    }
+
+    function toMin(hhmm) {
+      const [h, m] = String(hhmm || "").split(":").map(Number);
+      return h * 60 + m;
+    }
+
+    function fromMin(mins) {
+      return String(Math.floor(mins / 60)).padStart(2, "0") + ":" + String(mins % 60).padStart(2, "0");
+    }
+
+    function policyFor(detail, policies, dateStr) {
+      const capacities = {};
+      for (const table of detail.tables || []) capacities[table.id] = table.capacity;
+      let selected = {
+        policy_version: 0,
+        effective_from: null,
+        slot_minutes: detail.slot_minutes,
+        reservation_duration_minutes: detail.reservation_duration_minutes,
+        cancellation_cutoff_minutes: detail.cancellation_cutoff_minutes,
+        opening_hours: detail.opening_hours || [],
+        capacities,
+      };
+      for (const policy of policies || []) {
+        if (!policy.effective_from || policy.effective_from > dateStr) continue;
+        const later = selected.policy_version === 0 || policy.effective_from > selected.effective_from;
+        const same = selected.policy_version !== 0 && policy.effective_from === selected.effective_from;
+        if (later || (same && policy.policy_version > selected.policy_version)) selected = policy;
+      }
+      return selected;
+    }
+
+    function timesFor(policy, dateStr) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr || "")) return [];
+      const hours = (policy.opening_hours || []).find((entry) => entry.weekday === weekdayOf(dateStr));
+      if (!hours) return [];
+      const open = toMin(hours.opens);
+      const close = toMin(hours.closes);
+      const step = Number(policy.slot_minutes) || 30;
+      const duration = Number(policy.reservation_duration_minutes) || 0;
+      const out = [];
+      for (let t = open; t + duration <= close; t += step) out.push(fromMin(t));
+      return out;
+    }
+
+    function sameMembers(a, b) {
+      if (!a || !b || a.length !== b.length) return false;
+      const left = a.slice().sort();
+      const right = b.slice().sort();
+      return left.every((id, index) => id === right[index]);
+    }
+
+    function capacityOf(policy, ids) {
+      return ids.reduce((sum, id) => sum + Number((policy.capacities || {})[id] ?? 0), 0);
+    }
+
+    async function readJson(res) {
+      return res.json().catch(() => ({}));
+    }
+
+    if (path === "/signup") renderAuth("signup");
+    else if (path === "/login") renderAuth("login");
+    else if (path === "/lookup") renderLookup();
+    else renderHome();
+
+    function renderAuth(mode) {
+      const card = document.createElement("section");
+      card.className = "auth-card";
+      const h = document.createElement("h1");
+      h.textContent = mode === "signup" ? "Take a name." : "Welcome back.";
+      const p = document.createElement("p");
+      p.className = "quiet";
+      p.textContent = mode === "signup" ? "A display name is enough. No inbox theatre." : "The book remembers the name on the reservation.";
+      card.append(h, p);
+      const email = field("email", mode === "signup" ? "signup-email" : "login-email", "Email", "email");
+      const password = field("password", mode === "signup" ? "signup-password" : "login-password", "Password", "password");
+      card.append(email.wrap, password.wrap);
+      let display;
+      if (mode === "signup") {
+        display = field("name", "signup-display-name", "Name", "text");
+        card.append(display.wrap);
+      }
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "solid";
+      button.dataset.testid = mode === "signup" ? "signup-submit" : "login-submit";
+      button.textContent = mode === "signup" ? "Create account" : "Enter";
+      card.append(button);
+      const slot = document.createElement("div");
+      card.append(slot);
+      button.addEventListener("click", async () => {
+        slot.replaceChildren();
+        const payload = { email: email.input.value, password: password.input.value };
+        const url = mode === "signup" ? "/auth/signup" : "/auth/login";
+        if (mode === "signup") payload.display_name = display.input.value;
+        try {
+          const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
+          const data = await res.json();
+          if (!res.ok) {
+            slot.append(banner("auth-error", data.error?.message || "That did not work", "bad"));
+            return;
+          }
+          setSession({ token: data.token, display_name: data.display_name, user_id: data.user_id });
+          paintWho();
+        } catch {
+          slot.append(banner("auth-error", "The desk did not answer.", "bad"));
+        }
+      });
+      const alt = document.createElement("a");
+      alt.href = mode === "signup" ? "/login" : "/signup";
+      alt.textContent = mode === "signup" ? "I already have a name" : "I need an account";
+      card.append(alt);
+      view.append(card);
+    }
+
+    function renderHome() {
+      const hero = document.createElement("section");
+      hero.className = "hero";
+      const copy = document.createElement("div");
+      const h = document.createElement("h1");
+      h.textContent = "One table. One night. No doubles.";
+      const lede = document.createElement("p");
+      lede.className = "lede";
+      lede.textContent = "Search the book, choose a seat, and keep the reference. If the line drops, the same request finishes the same booking.";
+      copy.append(h, lede);
+      const panel = document.createElement("form");
+      panel.className = "panel";
+      panel.addEventListener("submit", (event) => event.preventDefault());
+      const fields = document.createElement("div");
+      fields.className = "fields";
+      const restaurant = field("restaurant", "restaurant-select", "Restaurant", "select");
+      const date = field("date", "date-input", "Date", "date");
+      const soon = new Date();
+      soon.setDate(soon.getDate() + 7);
+      date.input.value = `${soon.getFullYear()}-${String(soon.getMonth() + 1).padStart(2, "0")}-${String(soon.getDate()).padStart(2, "0")}`;
+      const party = field("party", "party-size-input", "Party", "number", { min: "1", value: "2" });
+      const go = document.createElement("button");
+      go.type = "submit";
+      go.className = "solid";
+      go.dataset.testid = "search-button";
+      go.textContent = "See the book";
+      fields.append(restaurant.wrap, date.wrap, party.wrap, go);
+      const status = document.createElement("div");
+      status.className = "status-line";
+      status.setAttribute("aria-live", "polite");
+      panel.append(fields, status);
+      hero.append(copy, panel);
+      const results = document.createElement("div");
+      results.id = "results";
+      const intro = document.createElement("p");
+      intro.className = "empty";
+      intro.textContent = "The book is shut until you ask for a night.";
+      results.append(intro);
+      const hold = document.createElement("div");
+      hold.id = "hold";
+      view.append(hero, results, hold);
+
+      const keys = new Map();
+      let gen = 0;
+      let details = {};
+      let last = null;
+
+      fetch("/restaurants").then((r) => r.json()).then((data) => {
+        for (const item of data.restaurants || []) {
+          const option = document.createElement("option");
+          option.value = item.id;
+          option.textContent = item.name;
+          restaurant.input.append(option);
+        }
+        if (restaurant.input.options.length) restaurant.input.selectedIndex = 0;
+      });
+
+      async function loadDetail(id) {
+        if (!details[id]) {
+          const res = await fetch("/restaurants/" + encodeURIComponent(id));
+          details[id] = await res.json();
+        }
+        return details[id];
+      }
+
+      function keyFor(body) {
+        const id = JSON.stringify(body);
+        if (!keys.has(id)) keys.set(id, crypto.randomUUID());
+        return keys.get(id);
+      }
+
+      panel.addEventListener("submit", () => runSearch({ keepForm: false }));
+
+      async function runSearch(options) {
+        const keepForm = Boolean(options && options.keepForm);
+        const my = ++gen;
+        const restaurantId = restaurant.input.value;
+        const day = date.input.value;
+        const partySize = party.input.value;
+        if (!restaurantId || !day || !partySize) {
+          status.textContent = "Choose a restaurant, a date and a party.";
+          return;
+        }
+        last = { restaurantId, day, partySize };
+        status.textContent = "Checking the book…";
+        status.classList.add("is-loading");
+        try {
+          const [res, detail] = await Promise.all([
+            fetch("/availability?" + new URLSearchParams({ restaurant_id: restaurantId, date: day, party_size: partySize })),
+            loadDetail(restaurantId),
+          ]);
+          const data = await res.json();
+          if (my !== gen) return;
+          status.classList.remove("is-loading");
+          if (!res.ok) {
+            status.textContent = data.error?.message || "The book could not be opened.";
+            return;
+          }
+          status.textContent = "";
+          if (!keepForm) hold.replaceChildren();
+          paintGrid(data, detail, Number(partySize));
+        } catch {
+          if (my !== gen) return;
+          status.classList.remove("is-loading");
+          status.textContent = "The book did not answer. Try the search again.";
+        }
+      }
+
+      function paintGrid(data, detail, partySize) {
+        results.replaceChildren();
+        const slots = data.slots || [];
+        if (!slots.length) {
+          const empty = document.createElement("div");
+          empty.dataset.testid = "no-slots";
+          empty.className = "empty";
+          empty.textContent = "The restaurant is closed that day.";
+          results.append(empty);
+          return;
+        }
+        const grid = document.createElement("div");
+        grid.dataset.testid = "availability-grid";
+        const labels = new Map((detail.tables || []).map((table) => [table.id, table.label]));
+        for (const slot of slots) {
+          const block = document.createElement("section");
+          block.className = "slot-block";
+          const title = document.createElement("h2");
+          const hhmm = slot.starts_at_local.split("T")[1];
+          title.textContent = hhmm;
+          const cells = document.createElement("div");
+          cells.className = "cells";
+          const open = new Set(slot.available_table_ids || []);
+          for (const table of detail.tables || []) {
+            cells.append(cellButton({
+              testid: "slot-" + table.id + "-" + hhmm,
+              available: open.has(table.id),
+              kicker: open.has(table.id) ? "Open" : "Unavailable",
+              title: table.label,
+              meta: "Seats " + table.capacity,
+              onOpen: () => openForm({
+                restaurantId: detail.id,
+                restaurantName: detail.name,
+                tableIds: [table.id],
+                labels: [table.label],
+                local: slot.starts_at_local,
+                partySize,
+              }),
+            }));
+          }
+          for (const option of slot.available_options || []) {
+            if (!option.table_ids || option.table_ids.length < 2) continue;
+            const ids = option.table_ids;
+            const names = ids.map((id) => labels.get(id) || id);
+            cells.append(cellButton({
+              testid: "slot-" + ids.join("+") + "-" + hhmm,
+              available: true,
+              combo: true,
+              kicker: "Together",
+              title: names.join(" + "),
+              meta: "Seats " + option.capacity,
+              onOpen: () => openForm({
+                restaurantId: detail.id,
+                restaurantName: detail.name,
+                tableIds: ids,
+                labels: names,
+                local: slot.starts_at_local,
+                partySize,
+              }),
+            }));
+          }
+          block.append(title, cells);
+          grid.append(block);
+        }
+        results.append(grid);
+      }
+
+      function cellButton(spec) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "cell" + (spec.combo ? " combo" : "");
+        button.dataset.testid = spec.testid;
+        button.dataset.available = spec.available ? "true" : "false";
+        const small = document.createElement("small");
+        small.textContent = spec.kicker;
+        const strong = document.createElement("strong");
+        strong.textContent = spec.title;
+        const meta = document.createElement("small");
+        meta.textContent = spec.meta;
+        button.disabled = !spec.available;
+        button.append(small, strong, meta);
+        button.addEventListener("click", () => {
+          if (button.dataset.available !== "true") return;
+          document.querySelectorAll(".cell.is-selected").forEach((el) => el.classList.remove("is-selected"));
+          button.classList.add("is-selected");
+          if (!session()) {
+            const existing = hold.querySelector("[data-testid='auth-error']");
+            if (!existing) hold.append(banner("auth-error", "Sign in before holding a table.", "bad"));
+            return;
+          }
+          const prior = hold.querySelector("[data-testid='auth-error']");
+          if (prior) prior.remove();
+          spec.onOpen();
+        });
+        return button;
+      }
+
+      function openForm(spec) {
+        hold.replaceChildren();
+        const form = document.createElement("form");
+        form.dataset.testid = "booking-form";
+        form.className = "ticket";
+        form.addEventListener("submit", (event) => { event.preventDefault(); submit(); });
+        const summary = document.createElement("p");
+        summary.dataset.testid = "booking-summary";
+        const when = spec.local.replace("T", " ");
+        summary.textContent = (spec.labels.length > 1 ? "Tables " : "Table ") + spec.labels.join(" and ") + " · " + when;
+        const row = document.createElement("div");
+        row.className = "row";
+        const partyField = field("book-party", "booking-party-size", "Party", "number", { min: "1", value: String(spec.partySize) });
+        const submitBtn = document.createElement("button");
+        submitBtn.type = "submit";
+        submitBtn.className = "solid";
+        submitBtn.dataset.testid = "booking-submit";
+        submitBtn.textContent = "Hold this table";
+        row.append(partyField.wrap, submitBtn);
+        const note = document.createElement("div");
+        form.append(summary, row, note);
+        hold.append(form);
+
+        let attempt = 0;
+        async function submit() {
+          const my = ++attempt;
+          const partyValue = Number(partyField.input.value);
+          const body = {
+            restaurant_id: spec.restaurantId,
+            starts_at_local: spec.local,
+            party_size: partyValue,
+          };
+          if (spec.tableIds.length === 1) body.table_id = spec.tableIds[0];
+          else body.table_ids = spec.tableIds;
+          try {
+            const res = await fetch("/reservations", {
+              method: "POST",
+              headers: { "content-type": "application/json", "idempotency-key": keyFor(body), ...authHeaders() },
+              body: JSON.stringify(body),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (my !== attempt) return;
+            if (res.ok) {
+              showConfirmation(data, spec);
+              return;
+            }
+            form.querySelector("[data-testid='confirmation']")?.remove();
+            form.querySelector("[data-testid='booking-uncertain']")?.remove();
+            note.querySelector("[data-testid='booking-error']")?.remove();
+            note.append(banner("booking-error", data.error?.message || "The table was not held.", "bad"));
+            if (data.error?.code === "table_unavailable") runSearch({ keepForm: true });
+          } catch {
+            if (my !== attempt) return;
+            form.querySelector("[data-testid='confirmation']")?.remove();
+            form.querySelector("[data-testid='booking-error']")?.remove();
+            note.querySelector("[data-testid='booking-uncertain']")?.remove();
+            note.append(banner("booking-uncertain", "No answer came back. The table may already be held. Submit again — the same request will not book it twice.", "unsure"));
+          }
+        }
+
+        function showConfirmation(data, spec) {
+          note.replaceChildren();
+          const box = document.createElement("div");
+          box.dataset.testid = "confirmation";
+          const k = document.createElement("p");
+          k.className = "quiet";
+          k.textContent = "Reference";
+          const ref = document.createElement("p");
+          ref.className = "ref";
+          ref.dataset.testid = "confirmation-reference";
+          ref.textContent = data.reference;
+          const details = document.createElement("p");
+          details.dataset.testid = "confirmation-details";
+          details.textContent = spec.restaurantName + " · " + spec.labels.join(", ") + " · " + spec.local.replace("T", " ");
+          const tables = document.createElement("p");
+          tables.dataset.testid = "confirmation-tables";
+          tables.textContent = spec.labels.join(", ");
+          box.append(k, ref, details, tables);
+          note.append(box);
+        }
+      }
+    }
+
+    function renderLookup() {
+      const card = document.createElement("section");
+      card.className = "auth-card";
+      const h = document.createElement("h1");
+      h.textContent = "Find the booking.";
+      const ref = field("ref", "lookup-reference-input", "Reference", "text");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "solid";
+      button.dataset.testid = "lookup-submit";
+      button.textContent = "Look up";
+      const out = document.createElement("div");
+      card.append(h, ref.wrap, button, out);
+      button.addEventListener("click", () => runLookup());
+      view.replaceChildren(card);
+
+      async function runLookup() {
+        out.replaceChildren();
+        const reference = ref.input.value.trim();
+        if (!session()) {
+          out.append(banner("reservation-error", "Sign in to read a reservation.", "bad"));
+          return;
+        }
+        try {
+          const res = await fetch("/reservations/" + encodeURIComponent(reference), { headers: authHeaders() });
+          const data = await readJson(res);
+          if (!res.ok) {
+            out.append(banner("reservation-error", data.error?.message || "No reservation under that reference.", "bad"));
+            return;
+          }
+          const [detailRes, policyRes, historyRes] = await Promise.all([
+            fetch("/restaurants/" + encodeURIComponent(data.restaurant_id)),
+            fetch("/restaurants/" + encodeURIComponent(data.restaurant_id) + "/policies"),
+            fetch("/reservations/" + encodeURIComponent(data.reference) + "/history", { headers: authHeaders() }),
+          ]);
+          const detail = detailRes.ok ? await readJson(detailRes) : { tables: [], name: data.restaurant_id, combinable: [] };
+          const policyBody = policyRes.ok ? await readJson(policyRes) : {};
+          const historyBody = historyRes.ok ? await readJson(historyRes) : {};
+          paintDetail(data, detail, policyBody.policies || [], historyBody.entries || []);
+        } catch {
+          out.append(banner("reservation-error", "The book did not answer.", "bad"));
+        }
+      }
+
+      function paintDetail(data, detail, policies, entries) {
+        out.replaceChildren();
+        let current = data;
+        const labels = new Map((detail.tables || []).map((table) => [table.id, table.label]));
+        const idsOf = (res) => res.table_ids || (res.table_id ? [res.table_id] : []);
+        const namesOf = (res) => idsOf(res).map((id) => labels.get(id) || id);
+        const box = document.createElement("div");
+        box.dataset.testid = "reservation-detail";
+        const status = document.createElement("p");
+        status.dataset.testid = "reservation-status";
+        status.textContent = current.status;
+        const tables = document.createElement("p");
+        tables.dataset.testid = "reservation-tables";
+        tables.textContent = namesOf(current).join(", ");
+        const meta = document.createElement("p");
+        const writeMeta = () => {
+          meta.textContent = (detail.name || current.restaurant_id) + " · " + String(current.starts_at_local || "").replace("T", " ") + " · party of " + current.party_size;
+        };
+        writeMeta();
+        box.append(status, tables, meta);
+        if (entries && entries.length) {
+          const historyList = document.createElement("ul");
+          historyList.className = "history";
+          for (const entry of entries) {
+            const li = document.createElement("li");
+            const bits = entry.changes?.length
+              ? entry.changes.map((change) => change.field + " → " + (Array.isArray(change.to) ? change.to.join("+") : change.to)).join(", ")
+              : "";
+            li.textContent = entry.event + (bits ? " · " + bits : "");
+            historyList.append(li);
+          }
+          box.append(historyList);
+        }
+
+        const changeForm = document.createElement("form");
+        changeForm.dataset.testid = "change-form";
+        changeForm.className = "ticket";
+        changeForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          saveChange();
+        });
+        const changeTitle = document.createElement("p");
+        changeTitle.className = "quiet";
+        const rules = document.createElement("p");
+        rules.className = "rules";
+        rules.dataset.testid = "change-rules";
+        const grid = document.createElement("div");
+        grid.className = "change-grid";
+        const initialLocal = String(current.starts_at_local || "");
+        const partyField = field("change-party", "change-party-size", "Party", "number", {
+          min: "1", step: "1", value: String(current.party_size),
+        });
+        const dateField = field("change-date", "change-date", "Date", "date", { value: initialLocal.slice(0, 10) });
+        const timeField = field("change-time", "change-time", "Time", "select");
+        grid.append(partyField.wrap, dateField.wrap, timeField.wrap);
+        const seats = document.createElement("div");
+        seats.className = "cells";
+        seats.dataset.testid = "change-seats";
+        const note = document.createElement("div");
+        const save = document.createElement("button");
+        save.type = "submit";
+        save.className = "solid";
+        save.dataset.testid = "change-submit";
+        save.textContent = "Save change";
+        changeForm.append(changeTitle, rules, grid, seats, save, note);
+
+        if (current.status === "confirmed") {
+          const cancel = document.createElement("button");
+          cancel.type = "button";
+          cancel.className = "ghost";
+          cancel.dataset.testid = "reservation-cancel-button";
+          cancel.textContent = "Cancel reservation";
+          cancel.addEventListener("click", async () => {
+            cancel.disabled = true;
+            try {
+              const done = await fetch("/reservations/" + encodeURIComponent(current.reference) + "/cancel", {
+                method: "POST",
+                headers: authHeaders(),
+              });
+              const body = await readJson(done);
+              if (!done.ok) {
+                out.append(banner("reservation-error", body.error?.message || "The cancellation was refused.", "bad"));
+                cancel.disabled = false;
+                return;
+              }
+              current = body;
+              status.textContent = body.status;
+              tables.textContent = namesOf(body).join(", ");
+              writeMeta();
+              cancel.remove();
+              changeForm.remove();
+            } catch {
+              out.append(banner("reservation-error", "The book did not answer.", "bad"));
+              cancel.disabled = false;
+            }
+          });
+          box.append(cancel, changeForm);
+        }
+        out.append(box);
+
+        let chosen = idsOf(current).slice();
+        let avail = null;
+        let availKey = "";
+        let availGen = 0;
+
+        function selectedPolicy() {
+          return policyFor(detail, policies, dateField.input.value);
+        }
+
+        function setTimeOptions(times, preferred) {
+          const want = preferred || timeField.input.value;
+          const unique = [];
+          for (const t of times) if (t && !unique.includes(t)) unique.push(t);
+          const sig = unique.join(",");
+          if (timeField.input.dataset.sig !== sig) {
+            timeField.input.dataset.sig = sig;
+            timeField.input.replaceChildren();
+            for (const t of unique) {
+              const opt = document.createElement("option");
+              opt.value = t;
+              opt.textContent = t;
+              timeField.input.append(opt);
+            }
+          }
+          if (unique.includes(want)) timeField.input.value = want;
+          else if (unique.length) timeField.input.value = unique[0];
+        }
+
+        function localStamp() {
+          return dateField.input.value + "T" + timeField.input.value;
+        }
+
+        function paintChange() {
+          const policy = selectedPolicy();
+          const day = dateField.input.value;
+          const partyRaw = partyField.input.value;
+          const partyOk = /^(0|[1-9][0-9]*)$/.test(partyRaw) && Number(partyRaw) >= 1;
+          const party = partyOk ? Number(partyRaw) : NaN;
+          setTimeOptions(timesFor(policy, day), timeField.input.value || initialLocal.slice(11, 16));
+          const when = localStamp();
+          rules.textContent = /^\d{4}-\d{2}-\d{2}$/.test(day)
+            ? "Seat counts follow the house rules for " + humanDate(day) + " · " + policy.reservation_duration_minutes + " minute seating · " + policy.slot_minutes + " minute grid."
+            : "Choose a date to see the seat counts for that night.";
+          const names = (chosen || []).map((id) => labels.get(id) || id);
+          changeTitle.textContent = (names.length ? names.join(" and ") : "Choose a table") + (when.length > 11 ? " · " + when : "");
+          const slot = avail && availKey === day + "|" + partyRaw
+            ? (avail.slots || []).find((entry) => String(entry.starts_at_local).slice(11, 16) === timeField.input.value)
+            : null;
+          const waiting = availKey !== day + "|" + partyRaw;
+          const open = new Set(slot ? slot.available_table_ids || [] : []);
+          const combos = new Set((slot?.available_options || []).map((option) => (option.table_ids || []).join("\0")));
+          const owned = (!waiting && when === current.starts_at_local) ? new Set(idsOf(current)) : new Set();
+          seats.replaceChildren();
+          const options = [];
+          for (const table of detail.tables || []) options.push([table.id]);
+          for (const pair of detail.combinable || []) {
+            if (pair && pair.length === 2) options.push(pair.slice());
+          }
+          for (const ids of options) {
+            const cap = capacityOf(policy, ids);
+            const tooSmall = !partyOk || party > cap;
+            const marked = ids.length === 1
+              ? open.has(ids[0]) || owned.has(ids[0])
+              : ids.every((id) => owned.has(id)) || combos.has(ids.join("\0")) || ids.every((id) => open.has(id) || owned.has(id));
+            const free = !waiting && !tooSmall && marked;
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "cell" + (ids.length > 1 ? " combo" : "");
+            button.dataset.testid = "change-seat-" + ids.join("+");
+            button.dataset.available = free ? "true" : "false";
+            button.dataset.capacity = String(cap);
+            if (sameMembers(ids, chosen)) button.classList.add("is-selected");
+            const kicker = document.createElement("small");
+            kicker.textContent = waiting ? "Checking" : tooSmall ? "Too small" : free ? "Open" : "Taken";
+            const strong = document.createElement("strong");
+            strong.textContent = ids.map((id) => labels.get(id) || id).join(" + ");
+            const capLabel = document.createElement("small");
+            capLabel.dataset.testid = "change-capacity-" + ids.join("+");
+            capLabel.textContent = "Seats " + cap;
+            button.disabled = !free;
+            button.append(kicker, strong, capLabel);
+            button.addEventListener("click", () => {
+              if (button.dataset.available !== "true") return;
+              chosen = ids.slice();
+              paintChange();
+            });
+            seats.append(button);
+          }
+        }
+
+        async function refreshAvailability() {
+          const day = dateField.input.value;
+          const partyRaw = partyField.input.value;
+          paintChange();
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !/^(0|[1-9][0-9]*)$/.test(partyRaw)) return;
+          const my = ++availGen;
+          try {
+            const res = await fetch("/availability?" + new URLSearchParams({
+              restaurant_id: current.restaurant_id,
+              date: day,
+              party_size: partyRaw,
+            }));
+            const body = await readJson(res);
+            if (my !== availGen) return;
+            avail = res.ok ? body : { slots: [] };
+            availKey = day + "|" + partyRaw;
+            const fromApi = (avail.slots || []).map((slot) => String(slot.starts_at_local).slice(11, 16));
+            if (fromApi.length) setTimeOptions(fromApi, timeField.input.value);
+            paintChange();
+          } catch {
+            if (my !== availGen) return;
+            avail = { slots: [] };
+            availKey = day + "|" + partyRaw;
+            paintChange();
+          }
+        }
+
+        function follow() { refreshAvailability(); }
+        partyField.input.addEventListener("input", follow);
+        dateField.input.addEventListener("input", follow);
+        timeField.input.addEventListener("input", follow);
+        timeField.input.addEventListener("change", follow);
+        if (current.status === "confirmed") follow();
+
+        async function saveChange() {
+          note.replaceChildren();
+          if (current.status !== "confirmed") {
+            note.append(banner("change-error", "This reservation is cancelled.", "bad"));
+            return;
+          }
+          const partyRaw = partyField.input.value;
+          const day = dateField.input.value;
+          const time = timeField.input.value;
+          if (!/^(0|[1-9][0-9]*)$/.test(partyRaw) || !/^\d{4}-\d{2}-\d{2}$/.test(day) || !/^\d{2}:\d{2}$/.test(time || "")) {
+            note.append(banner("change-error", "Party, date and time all need a real value.", "bad"));
+            return;
+          }
+          if (!chosen.length) {
+            note.append(banner("change-error", "Choose a table.", "bad"));
+            return;
+          }
+          const body = {
+            party_size: Number(partyRaw),
+            starts_at_local: day + "T" + time,
+          };
+          if (Number.isInteger(current.revision)) body.expected_revision = current.revision;
+          if (chosen.length === 1) body.table_id = chosen[0];
+          else body.table_ids = chosen.slice();
+          save.disabled = true;
+          try {
+            const res = await fetch("/reservations/" + encodeURIComponent(current.reference), {
+              method: "PATCH",
+              headers: { "content-type": "application/json", ...authHeaders() },
+              body: JSON.stringify(body),
+            });
+            const saved = await readJson(res);
+            if (!res.ok) {
+              note.append(banner("change-error", saved.error?.message || "The change was refused.", "bad"));
+              if (saved.error?.code === "stale_revision") {
+                const again = await fetch("/reservations/" + encodeURIComponent(current.reference), { headers: authHeaders() });
+                const fresh = await readJson(again);
+                if (again.ok) current = fresh;
+              }
+              return;
+            }
+            current = saved;
+            chosen = idsOf(saved).slice();
+            status.textContent = saved.status;
+            tables.textContent = namesOf(saved).join(", ");
+            writeMeta();
+            partyField.input.value = String(saved.party_size);
+            dateField.input.value = String(saved.starts_at_local || "").slice(0, 10);
+            setTimeOptions(timesFor(selectedPolicy(), dateField.input.value), String(saved.starts_at_local || "").slice(11, 16));
+            note.append(banner("change-saved", "The booking now matches what you asked for.", "ok"));
+            availKey = "";
+            follow();
+          } catch {
+            note.append(banner("change-error", "No answer came back. Nothing was confirmed. Save again.", "unsure"));
+          } finally {
+            save.disabled = false;
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>

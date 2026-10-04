@@ -1,0 +1,78 @@
+{
+  "revision": "",
+  "track": "tablekeeper",
+  "stages": {
+    "1": "pass",
+    "2": "error"
+  },
+  "highest_contiguous": 1,
+  "started_at": "2026-10-03T19:33:01.126935+00:00",
+  "finished_at": "2026-10-03T19:37:18.168970+00:00",
+  "schema_version": 2,
+  "run_id": "fe6f38c7a4554b5dbee0d0e0a0d5b8a9",
+  "mode": "host",
+  "provenance": "external-url",
+  "state": "completed",
+  "pytest_args": [],
+  "suite_digest": "91f4007512983b527d0f60633e006572f9a3ac7ae4f903df22d13614656f6c06",
+  "checks": {
+    "1": {
+      "collected": 120,
+      "passed": 120,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_1/test_health_reset_auth.py": {
+          "passed": 12,
+          "total": 12
+        },
+        "stage_1/test_reservations.py": {
+          "passed": 37,
+          "total": 37
+        },
+        "stage_1/test_restaurants_availability.py": {
+          "passed": 18,
+          "total": 18
+        },
+        "stage_1/test_retries_time_input.py": {
+          "passed": 20,
+          "total": 20
+        },
+        "stage_1/test_sample.py": {
+          "passed": 20,
+          "total": 20
+        },
+        "stage_1/test_seeded_state.py": {
+          "passed": 13,
+          "total": 13
+        }
+      }
+    },
+    "2": {
+      "collected": 25,
+      "passed": 1,
+      "failed": 23,
+      "errors": 1,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_2/test_sample.py": {
+          "passed": 0,
+          "total": 8
+        },
+        "stage_2/test_ui.py": {
+          "passed": 1,
+          "total": 17
+        }
+      }
+    }
+  },
+  "overshoot": null,
+  "claimed_stage": null,
+  "share": null,
+  "upgrade_sources": {}
+}

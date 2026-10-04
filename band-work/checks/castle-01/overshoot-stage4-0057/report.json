@@ -1,0 +1,43 @@
+{
+  "revision": "",
+  "track": "tablekeeper",
+  "stages": {
+    "4": "fail"
+  },
+  "highest_contiguous": 0,
+  "started_at": "2026-10-04T00:58:35.896039+00:00",
+  "finished_at": "2026-10-04T00:58:37.567439+00:00",
+  "schema_version": 2,
+  "run_id": "b838e91d54724ac7a670f6d30ef4c65b",
+  "mode": "host",
+  "provenance": "external-url",
+  "state": "completed",
+  "pytest_args": [],
+  "suite_digest": "96af408b88b0cbd356a9c36875faed1872cd9bc8c18490b6e943233302394c85",
+  "checks": {
+    "4": {
+      "collected": 6,
+      "passed": 4,
+      "failed": 2,
+      "errors": 0,
+      "skipped": 0,
+      "deselected": 0,
+      "xfailed": 0,
+      "files": {
+        "stage_4/test_sample.py": {
+          "passed": 4,
+          "total": 6
+        }
+      }
+    }
+  },
+  "overshoot": null,
+  "claimed_stage": null,
+  "share": null,
+  "upgrade_sources": {
+    "4": {
+      "url": "http://127.0.0.1:8082",
+      "provenance": "external-url"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_3 --base-url http://127.0.0.1:8082 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q -x --harness-summary /workspace/band-work/checks/s2-overshoot/stage-3.counts.json
+
+F
+=============================================================================================== FAILURES ===============================================================================================
+________________________________________________________________________ test_booking_carries_the_effective_policy_and_decision ________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7f9ae7510040>, api = <function api.<locals>._api at 0x7f9ae7510220>
+
+    def test_booking_carries_the_effective_policy_and_decision(reset, api):
+        reset(fx.fixture(restaurants=[fx.managed_restaurant()]))
+        ada = api().authenticate(fx.ADA['email'], fx.ADA['password'])
+        date = fx.booking_date()
+>       published = assert_status(ada.post('/restaurants/r_anker/policies',
+            json=fx.policy(date, reservation_duration_minutes=60), idempotency_key=new_key()), 201).json()
+
+tablekeeper/test/stage_3/test_sample.py:23: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [404 Not Found]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 404. POST /restaurants/r_anker/policies -> 404 '{"error":{"code":"not_found","message":"No such resource"}}'
+
+harness/http.py:108: AssertionError
+======================================================================================= short test summary info ========================================================================================
+FAILED tablekeeper/test/stage_3/test_sample.py::test_booking_carries_the_effective_policy_and_decision - AssertionError: expected 201, got 404. POST /restaurants/r_anker/policies -> 404 '{"error":{...
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 0.21s
+

@@ -1,0 +1,53 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_4 --base-url http://127.0.0.1:8083 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --previous-base-url http://127.0.0.1:8082 --harness-summary /workspace/dark-factory-tablekeeper/band-work/checks/castle-01/overshoot-stage4-0113/stage-4.counts.json
+
+....FF                                                                                                                                                                                           [100%]
+=============================================================================================== FAILURES ===============================================================================================
+________________________________________________________________________________ test_series_clock_time_can_be_changed _________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...', date='2026-10-11', ada=<harness.http.Api object at 0x7ff4d9ed5950>, bob=<harness.http.Api object at 0x7ff4d9ed5b50>)
+book = <function book.<locals>._book at 0x7ff4d9ed89a0>
+
+    def test_series_clock_time_can_be_changed(world, book):
+        from harness.http import new_key
+        anchor = book().json()
+        made = world.ada.post('/series', json=dict(anchor_reference=anchor['reference'],
+            count=2, interval_weeks=1), idempotency_key=new_key())
+        assert made.status_code == 201
+        response = world.ada.post('/series/' + made.json()['series_id'] + '/amend',
+            json=dict(expected_revision=1, from_index=0, local_time='20:00'), idempotency_key=new_key())
+>       assert response.status_code == 201
+E       assert 404 == 201
+E        +  where 404 = <Response [404 Not Found]>.status_code
+
+tablekeeper/test/stage_4/test_sample.py:90: AssertionError
+________________________________________________________________________________ test_a_closure_preview_returns_a_plan _________________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7ff4d9ed85e0>, api = <function api.<locals>._api at 0x7ff4d9ed8a40>
+
+    def test_a_closure_preview_returns_a_plan(reset, api):
+        reset(fx.fixture(restaurants=[fx.managed_restaurant() | {'combinable': COMBINABLE}]))
+        ada = api().authenticate(fx.ADA['email'], fx.ADA['password'])
+        date = dt.date.fromisoformat(fx.booking_date())
+        def instant(hour):
+            return dt.datetime.combine(date, dt.time(hour), tzinfo=ZoneInfo('Europe/Berlin')).isoformat()
+>       plan = assert_status(ada.post('/restaurants/r_anker/replans', json={
+            'table_id': 't_2', 'from': instant(18), 'to': instant(23)}, idempotency_key=new_key()), 201).json()
+
+tablekeeper/test/stage_4/test_sample.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [404 Not Found]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 404. POST /restaurants/r_anker/replans -> 404 '{"error":{"code":"not_found","message":"No such resource"}}'
+
+harness/http.py:108: AssertionError
+======================================================================================= short test summary info ========================================================================================
+FAILED tablekeeper/test/stage_4/test_sample.py::test_series_clock_time_can_be_changed - assert 404 == 201
+ +  where 404 = <Response [404 Not Found]>.status_code
+FAILED tablekeeper/test/stage_4/test_sample.py::test_a_closure_preview_returns_a_plan - AssertionError: expected 201, got 404. POST /restaurants/r_anker/replans -> 404 '{"error":{"code":"not_found","message":"No such resource"}}'
+2 failed, 4 passed in 1.30s
+

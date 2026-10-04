@@ -1,0 +1,4 @@
+Pass 2026-10-04. Host report: band-work/checks/castle-01/host-0153.md
+Numbers live only in that file and in host-0153/, overshoot-stage3-0153/, overshoot-stage4-0153/.
+Isolated Docker was not run. No API key. No room.json. Product source was not edited.
+

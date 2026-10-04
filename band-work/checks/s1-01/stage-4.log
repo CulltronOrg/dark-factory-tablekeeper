@@ -1,0 +1,64 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_4 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --harness-summary /workspace/band-work/checks/s1-01/stage-4.counts.json
+
+.FF.F.                                                                                                                                                                                           [100%]
+=============================================================================================== FAILURES ===============================================================================================
+_____________________________________________________________________________________ test_booking_a_declared_pair _____________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...', date='2026-10-10', ada=<harness.http.Api object at 0x7f09904bbd40>, bob=<harness.http.Api object at 0x7f09904de4e0>)
+
+    def test_booking_a_declared_pair(world):
+>       body = assert_status(book(world.ada, world, table_ids=["t_1", "t_2"],
+                                  party_size=6), 201).json()
+
+tablekeeper/test/stage_4/test_sample.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+________________________________________________________________________ test_table_id_is_still_accepted_and_means_a_set_of_one ________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...', date='2026-10-10', ada=<harness.http.Api object at 0x7f09904df320>, bob=<harness.http.Api object at 0x7f09904dc200>)
+
+    def test_table_id_is_still_accepted_and_means_a_set_of_one(world):
+>       body = assert_status(book(world.ada, world, table_id="t_3", party_size=4),
+                             201).json()
+
+tablekeeper/test/stage_4/test_sample.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [500 Internal Server Error]>, expected = 201
+
+    def assert_status(resp: httpx.Response, expected: int) -> httpx.Response:
+>       assert resp.status_code == expected, \
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {expected}, got {resp.status_code}. {_describe(resp)}"
+E       AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service failed while handling the request"}}'
+
+harness/http.py:108: AssertionError
+________________________________________________________________________________ test_series_clock_time_can_be_changed _________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...', date='2026-10-10', ada=<harness.http.Api object at 0x7f09904dd820>, bob=<harness.http.Api object at 0x7f09904f2a50>)
+book = <function book.<locals>._book at 0x7f09904d3e20>
+
+    def test_series_clock_time_can_be_changed(world, book):
+        from harness.http import new_key
+        anchor = book().json()
+>       made = world.ada.post('/series', json=dict(anchor_reference=anchor['reference'],
+                                                                    ^^^^^^^^^^^^^^^^^^^
+            count=2, interval_weeks=1), idempotency_key=new_key())
+E       KeyError: 'reference'
+
+tablekeeper/test/stage_4/test_sample.py:85: KeyError
+======================================================================================= short test summary info ========================================================================================
+FAILED tablekeeper/test/stage_4/test_sample.py::test_booking_a_declared_pair - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal","message":"The service f...
+FAILED tablekeeper/test/stage_4/test_sample.py::test_table_id_is_still_accepted_and_means_a_set_of_one - AssertionError: expected 201, got 500. POST /reservations -> 500 '{"error":{"code":"internal...
+FAILED tablekeeper/test/stage_4/test_sample.py::test_series_clock_time_can_be_changed - KeyError: 'reference'
+3 failed, 3 passed in 1.11s
+

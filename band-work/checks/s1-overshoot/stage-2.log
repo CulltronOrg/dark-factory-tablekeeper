@@ -1,0 +1,58 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_2 --base-url http://127.0.0.1:8081 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q -x --harness-summary /workspace/band-work/checks/s1-overshoot/stage-2.counts.json
+
+F
+=============================================================================================== FAILURES ===============================================================================================
+_________________________________________________________________________ test_routes_are_directly_navigable[/-search-button] __________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8081/'>, route = '/', anchor = 'search-button'
+
+    @pytest.mark.parametrize("route,anchor", [
+        ("/", "search-button"), ("/signup", "signup-submit"),
+        ("/login", "login-submit"), ("/lookup", "lookup-submit"),
+    ])
+    def test_routes_are_directly_navigable(seeded, page, route, anchor):
+        page.goto(route)
+>       page.wait_for_selector(sel(anchor), state="attached")
+
+tablekeeper/test/stage_2/test_sample.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.12/site-packages/playwright/sync_api/_generated.py:9061: in wait_for_selector
+    self._sync(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_page.py:429: in wait_for_selector
+    return await self._main_frame.wait_for_selector(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.12/site-packages/playwright/_impl/_frame.py:395: in wait_for_selector
+    await self._channel.send(
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f9bd4fd8dd0>, cb = <function Channel.send.<locals>.<lambda> at 0x7f9bd532f2e0>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='search-button']")
+
+../df-py/lib/python3.12/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+======================================================================================= short test summary info ========================================================================================
+FAILED tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/-search-button] - playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed in 11.11s
+

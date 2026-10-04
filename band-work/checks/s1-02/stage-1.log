@@ -1,0 +1,54 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_1 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --harness-summary /workspace/band-work/checks/s1-02/stage-1.counts.json
+
+.............................................F..................................................F.......................                                                                         [100%]
+=============================================================================================== FAILURES ===============================================================================================
+_________________________________________________________________________________ test_patch_validation_matches_create _________________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7f2d9cc9f7a0>, bob=<harness.http.Api object at 0x7f2d9ccea5a0>)
+book = <function book.<locals>._book at 0x7f2d9ccf45e0>
+
+    def test_patch_validation_matches_create(world, book):
+        ref = book(table_id="t_2", at="19:00").json()["reference"]
+        assert_error(world.ada.patch(f"/reservations/{ref}",
+                                     json={"starts_at_local": fx.local(world.date, "19:15")}),
+                     422, "not_on_slot_grid")
+>       assert_error(world.ada.patch(f"/reservations/{ref}", json={"table_id": "t_1"}),
+                     422, "party_exceeds_capacity")
+
+tablekeeper/test/stage_1/test_reservations.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+resp = <Response [200 OK]>, status = 422, code = 'party_exceeds_capacity'
+
+    def assert_error(resp: httpx.Response, status: int, code: str) -> httpx.Response:
+        """Assert an error response's status and `error.code` together.
+    
+        Both are asserted in one place so a failure reports the actual code rather
+        than only the status, which is what makes a wrong-code failure debuggable.
+        """
+        actual = error_code(resp) if 400 <= resp.status_code < 600 else None
+>       assert resp.status_code == status and actual == code, (
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            f"expected {status} {code}, got {resp.status_code} {actual}. {_describe(resp)}")
+E       AssertionError: expected 422 party_exceeds_capacity, got 200 None. PATCH /reservations/KQ6JARWW -> 200 '{"reservation_id":"res_992e306bb0f289dc00","reference":"KQ6JARWW","restaurant_id":"r_anker","status":"confirmed","starts_at_local":"2026-10-10T19:00","starts_at":"2026-10-10T19:00:00+02:00","ends_at":"2026-10-10T20:30:00+02:00","created_at":"2026-10-03T12:19:51+00:00","table_ids":["t_1"],"table_id":"t_1","revision":2,"accepted_terms":{"policy_version":0,"slot_minutes":30,"reservation_duration_minu...'
+
+harness/http.py:134: AssertionError
+_______________________________________________________________________________ test_create_returns_the_documented_shape _______________________________________________________________________________
+
+world = namespace(fixture={'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': ...}, date='2026-10-10', ada=<harness.http.Api object at 0x7f2d9ccca3c0>, bob=<harness.http.Api object at 0x7f2d9ccbe120>)
+book = <function book.<locals>._book at 0x7f2d9ccf7b00>
+
+    def test_create_returns_the_documented_shape(world, book):
+        body = assert_status(book(table_id="t_2", at="19:00", party_size=4), 201).json()
+        assert body["restaurant_id"] == world.rid
+        assert body["table_id"] == "t_2"
+>       assert body["party_size"] == 4
+               ^^^^^^^^^^^^^^^^^^
+E       KeyError: 'party_size'
+
+tablekeeper/test/stage_1/test_sample.py:93: KeyError
+======================================================================================= short test summary info ========================================================================================
+FAILED tablekeeper/test/stage_1/test_reservations.py::test_patch_validation_matches_create - AssertionError: expected 422 party_exceeds_capacity, got 200 None. PATCH /reservations/KQ6JARWW -> 200 '...
+FAILED tablekeeper/test/stage_1/test_sample.py::test_create_returns_the_documented_shape - KeyError: 'party_size'
+2 failed, 118 passed in 19.94s
+

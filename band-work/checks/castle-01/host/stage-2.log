@@ -1,0 +1,1154 @@
+$ /tmp/df-py/bin/python -m pytest /tmp/dark-factory-wearedevs/tablekeeper/test/stage_2 --base-url http://127.0.0.1:8080 -p harness.plugin --rootdir /tmp/dark-factory-wearedevs/tablekeeper/test -q --previous-base-url http://127.0.0.1:8083 --harness-summary /workspace/dark-factory-tablekeeper/band-work/checks/castle-01/host/stage-2.counts.json
+
+FFFFFF..FF.FFFFFFFFFFFFFF                                                                                                                                                                        [100%]
+=============================================================================================== FAILURES ===============================================================================================
+_________________________________________________________________________ test_routes_are_directly_navigable[/-search-button] __________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/'>, route = '/', anchor = 'search-button'
+
+    @pytest.mark.parametrize("route,anchor", [
+        ("/", "search-button"), ("/signup", "signup-submit"),
+        ("/login", "login-submit"), ("/lookup", "lookup-submit"),
+    ])
+    def test_routes_are_directly_navigable(seeded, page, route, anchor):
+        page.goto(route)
+>       page.wait_for_selector(sel(anchor), state="attached")
+
+tablekeeper/test/stage_2/test_sample.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:9061: in wait_for_selector
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:429: in wait_for_selector
+    return await self._main_frame.wait_for_selector(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:395: in wait_for_selector
+    await self._channel.send(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae05df1a0>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='search-button']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+---------------------------------------------------------------------------------------- Captured stderr setup -----------------------------------------------------------------------------------------
+(node:3915660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+______________________________________________________________________ test_routes_are_directly_navigable[/signup-signup-submit] _______________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/signup'>, route = '/signup', anchor = 'signup-submit'
+
+    @pytest.mark.parametrize("route,anchor", [
+        ("/", "search-button"), ("/signup", "signup-submit"),
+        ("/login", "login-submit"), ("/lookup", "lookup-submit"),
+    ])
+    def test_routes_are_directly_navigable(seeded, page, route, anchor):
+        page.goto(route)
+>       page.wait_for_selector(sel(anchor), state="attached")
+
+tablekeeper/test/stage_2/test_sample.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:9061: in wait_for_selector
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:429: in wait_for_selector
+    return await self._main_frame.wait_for_selector(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:395: in wait_for_selector
+    await self._channel.send(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae05df240>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='signup-submit']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+_______________________________________________________________________ test_routes_are_directly_navigable[/login-login-submit] ________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>, route = '/login', anchor = 'login-submit'
+
+    @pytest.mark.parametrize("route,anchor", [
+        ("/", "search-button"), ("/signup", "signup-submit"),
+        ("/login", "login-submit"), ("/lookup", "lookup-submit"),
+    ])
+    def test_routes_are_directly_navigable(seeded, page, route, anchor):
+        page.goto(route)
+>       page.wait_for_selector(sel(anchor), state="attached")
+
+tablekeeper/test/stage_2/test_sample.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:9061: in wait_for_selector
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:429: in wait_for_selector
+    return await self._main_frame.wait_for_selector(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:395: in wait_for_selector
+    await self._channel.send(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0358b80>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-submit']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+______________________________________________________________________ test_routes_are_directly_navigable[/lookup-lookup-submit] _______________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/lookup'>, route = '/lookup', anchor = 'lookup-submit'
+
+    @pytest.mark.parametrize("route,anchor", [
+        ("/", "search-button"), ("/signup", "signup-submit"),
+        ("/login", "login-submit"), ("/lookup", "lookup-submit"),
+    ])
+    def test_routes_are_directly_navigable(seeded, page, route, anchor):
+        page.goto(route)
+>       page.wait_for_selector(sel(anchor), state="attached")
+
+tablekeeper/test/stage_2/test_sample.py:51: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:9061: in wait_for_selector
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:429: in wait_for_selector
+    return await self._main_frame.wait_for_selector(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:395: in wait_for_selector
+    await self._channel.send(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0406200>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='lookup-submit']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+___________________________________________________________________________ test_login_signs_you_in_and_logout_signs_you_out ___________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_login_signs_you_in_and_logout_signs_you_out(seeded, page):
+>       log_in(page)
+
+tablekeeper/test/stage_2/test_sample.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_sample.py:29: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae04042c0>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+_______________________________________________________________________________ test_booking_flow_reaches_a_confirmation _______________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_booking_flow_reaches_a_confirmation(seeded, page):
+>       log_in(page)
+
+tablekeeper/test/stage_2/test_sample.py:63: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_sample.py:29: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0358ae0>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+_______________________________________________________________________________________ test_signup_signs_you_in _______________________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/signup'>
+
+    def test_signup_signs_you_in(seeded, page):
+>       sign_up(page, name="Dee")
+
+tablekeeper/test/stage_2/test_ui.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:25: in sign_up
+    page.fill(sel("signup-email"), email)
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae03594e0>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='signup-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+___________________________________________________________________________________ test_bad_login_shows_auth_error ____________________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_bad_login_shows_auth_error(seeded, page):
+>       log_in(page, password="wrong password", expect_success=False)
+
+tablekeeper/test/stage_2/test_ui.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2adf245260>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+______________________________________________________________________________ test_grid_shows_a_cell_per_table_per_slot _______________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/'>
+
+    def test_grid_shows_a_cell_per_table_per_slot(seeded, page):
+>       search(page, party_size=2)
+
+tablekeeper/test/stage_2/test_ui.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:45: in search
+    page.select_option(sel("restaurant-select"), restaurant)
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:12333: in select_option
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:1075: in select_option
+    return await self._main_frame.select_option(**params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:815: in select_option
+    return await self._channel.send("selectOption", self._timeout, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae037a020>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='restaurant-select']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+___________________________________________________________________________________ test_cells_carry_data_available ____________________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/'>
+
+    def test_cells_carry_data_available(seeded, page):
+>       search(page, party_size=6)
+
+tablekeeper/test/stage_2/test_ui.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:45: in search
+    page.select_option(sel("restaurant-select"), restaurant)
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:12333: in select_option
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:1075: in select_option
+    return await self._main_frame.select_option(**params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:815: in select_option
+    return await self._channel.send("selectOption", self._timeout, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0379300>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='restaurant-select']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+____________________________________________________________________________________ test_closed_day_shows_no_slots ____________________________________________________________________________________
+
+reset = <function reset.<locals>._reset at 0x7f2ae037a0c0>, page = <Page url='http://127.0.0.1:8080/'>
+
+    def test_closed_day_shows_no_slots(reset, page):
+        date = fx.booking_date()
+        closed = [h for h in fx.all_week() if h["weekday"] != fx.weekday_of(date)]
+        reset(fx.fixture(restaurants=[fx.restaurant(opening_hours=closed)]))
+>       search(page, date=date)
+
+tablekeeper/test/stage_2/test_ui.py:94: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:45: in search
+    page.select_option(sel("restaurant-select"), restaurant)
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:12333: in select_option
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:1075: in select_option
+    return await self._main_frame.select_option(**params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:815: in select_option
+    return await self._channel.send("selectOption", self._timeout, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0379d00>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='restaurant-select']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+____________________________________________________________________________ test_clicking_an_unavailable_cell_does_nothing ____________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_clicking_an_unavailable_cell_does_nothing(seeded, page):
+>       log_in(page)
+
+tablekeeper/test/stage_2/test_ui.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0378540>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+___________________________________________________________________ test_booking_while_signed_out_shows_auth_error_or_goes_to_login ____________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/'>
+
+    def test_booking_while_signed_out_shows_auth_error_or_goes_to_login(seeded, page):
+>       search(page, party_size=4)
+
+tablekeeper/test/stage_2/test_ui.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:45: in search
+    page.select_option(sel("restaurant-select"), restaurant)
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:12333: in select_option
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:1075: in select_option
+    return await self._main_frame.select_option(**params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:815: in select_option
+    return await self._channel.send("selectOption", self._timeout, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0358b80>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='restaurant-select']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+_________________________________________________________________________ test_a_booked_slot_is_unavailable_on_the_next_search _________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_a_booked_slot_is_unavailable_on_the_next_search(seeded, page):
+>       log_in(page)
+
+tablekeeper/test/stage_2/test_ui.py:117: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0379260>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+__________________________________________________________________________ test_booking_error_is_shown_when_the_booking_fails __________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>, api = <function api.<locals>._api at 0x7f2ae03ce5c0>
+
+    def test_booking_error_is_shown_when_the_booking_fails(seeded, page, api):
+        """Take the table over the API between opening the form and submitting."""
+>       log_in(page)
+
+tablekeeper/test/stage_2/test_ui.py:130: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae03a6660>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+__________________________________________________________________________________ test_lookup_shows_the_reservation ___________________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_lookup_shows_the_reservation(seeded, page):
+>       reference = _book_via_ui(page)
+                    ^^^^^^^^^^^^^^^^^^
+
+tablekeeper/test/stage_2/test_ui.py:161: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:151: in _book_via_ui
+    log_in(page)
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae037b9c0>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+_______________________________________________________________________ test_cancel_from_lookup_updates_without_a_manual_reload ________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_cancel_from_lookup_updates_without_a_manual_reload(seeded, page):
+>       reference = _book_via_ui(page)
+                    ^^^^^^^^^^^^^^^^^^
+
+tablekeeper/test/stage_2/test_ui.py:170: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:151: in _book_via_ui
+    log_in(page)
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae0418220>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+____________________________________________________________________________________ test_cancelling_frees_the_slot ____________________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_cancelling_frees_the_slot(seeded, page):
+>       reference = _book_via_ui(page)
+                    ^^^^^^^^^^^^^^^^^^
+
+tablekeeper/test/stage_2/test_ui.py:181: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:151: in _book_via_ui
+    log_in(page)
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae041ae80>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+____________________________________________________________________________ test_unknown_reference_shows_reservation_error ____________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_unknown_reference_shows_reservation_error(seeded, page):
+>       log_in(page)
+
+tablekeeper/test/stage_2/test_ui.py:193: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2adf245120>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+__________________________________________________________________________ test_submitting_the_booking_form_twice_books_once ___________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>
+
+    def test_submitting_the_booking_form_twice_books_once(seeded, page):
+        """The form stays on screen, so a second press sends the same body. A form
+        that mints its idempotency key at submit time sends a new one and is answered
+        409 table_unavailable."""
+>       _open_booking_form(page)
+
+tablekeeper/test/stage_2/test_ui.py:214: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:204: in _open_booking_form
+    log_in(page)
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae05dfec0>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+_____________________________________________________________________________ test_a_double_submit_leaves_one_reservation ______________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>, api = <function api.<locals>._api at 0x7f2ae05dc4a0>
+
+    def test_a_double_submit_leaves_one_reservation(seeded, page, api):
+>       _open_booking_form(page)
+
+tablekeeper/test/stage_2/test_ui.py:227: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:204: in _open_booking_form
+    log_in(page)
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae05df240>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+_________________________________________________________________________ test_changing_the_form_first_is_a_different_booking __________________________________________________________________________
+
+seeded = {'users': [{'id': 'u_ada', 'email': 'ada@example.com', 'password': 'correct horse', 'display_name': 'Ada'}, {'id': 'u_...s': [{'id': 'r_anker', 'name': 'Zum Anker', 'timezone': 'Europe/Berlin', 'slot_minutes': 30, ...}], 'reservations': []}
+page = <Page url='http://127.0.0.1:8080/login'>, api = <function api.<locals>._api at 0x7f2ae03a5a80>
+
+    def test_changing_the_form_first_is_a_different_booking(seeded, page, api):
+        """Editing a field starts a new booking, so it must not replay the old one."""
+>       _open_booking_form(page)
+
+tablekeeper/test/stage_2/test_ui.py:241: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tablekeeper/test/stage_2/test_ui.py:204: in _open_booking_form
+    log_in(page)
+tablekeeper/test/stage_2/test_ui.py:34: in log_in
+    page.fill(sel("login-email"), email or fx.ADA["email"])
+../df-py/lib/python3.13/site-packages/playwright/sync_api/_generated.py:11332: in fill
+    self._sync(
+../df-py/lib/python3.13/site-packages/playwright/_impl/_page.py:930: in fill
+    return await self._main_frame.fill(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:637: in fill
+    await self._fill(**locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_frame.py:649: in _fill
+    await self._channel.send("fill", self._timeout, locals_to_params(locals()))
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:76: in send
+    return await self._connection.wrap_api_call(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <playwright._impl._connection.Connection object at 0x7f2ae096ea50>, cb = <function Channel.send.<locals>.<lambda> at 0x7f2ae041b740>, is_internal = False, title = None
+
+    async def wrap_api_call(
+        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None
+    ) -> Any:
+        if self._api_zone.get():
+            return await cb()
+        task = asyncio.current_task(self._loop)
+        parsed_st = _attach_api_call_information(
+            getattr(task, "__pw_stack__", None) or _capture_stack_trace(),
+            is_internal,
+            title,
+        )
+        self._api_zone.set(parsed_st)
+        try:
+            return await cb()
+        except Exception as error:
+>           raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+E           playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+E           Call log:
+E             - waiting for locator("[data-testid='login-email']")
+
+../df-py/lib/python3.13/site-packages/playwright/_impl/_connection.py:632: TimeoutError
+======================================================================================= short test summary info ========================================================================================
+FAILED tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/-search-button] - playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='search-button']")
+FAILED tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/signup-signup-submit] - playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='signup-submit']")
+FAILED tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/login-login-submit] - playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-submit']")
+FAILED tablekeeper/test/stage_2/test_sample.py::test_routes_are_directly_navigable[/lookup-lookup-submit] - playwright._impl._errors.TimeoutError: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='lookup-submit']")
+FAILED tablekeeper/test/stage_2/test_sample.py::test_login_signs_you_in_and_logout_signs_you_out - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_sample.py::test_booking_flow_reaches_a_confirmation - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_signup_signs_you_in - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='signup-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_bad_login_shows_auth_error - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_grid_shows_a_cell_per_table_per_slot - playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='restaurant-select']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_cells_carry_data_available - playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='restaurant-select']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_closed_day_shows_no_slots - playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='restaurant-select']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_clicking_an_unavailable_cell_does_nothing - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_booking_while_signed_out_shows_auth_error_or_goes_to_login - playwright._impl._errors.TimeoutError: Page.select_option: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='restaurant-select']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_a_booked_slot_is_unavailable_on_the_next_search - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_booking_error_is_shown_when_the_booking_fails - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_lookup_shows_the_reservation - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_cancel_from_lookup_updates_without_a_manual_reload - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_cancelling_frees_the_slot - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_unknown_reference_shows_reservation_error - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_submitting_the_booking_form_twice_books_once - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_a_double_submit_leaves_one_reservation - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+FAILED tablekeeper/test/stage_2/test_ui.py::test_changing_the_form_first_is_a_different_booking - playwright._impl._errors.TimeoutError: Page.fill: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("[data-testid='login-email']")
+22 failed, 3 passed in 236.47s (0:03:56)
+
