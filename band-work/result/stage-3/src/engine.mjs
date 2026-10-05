@@ -29,7 +29,14 @@ export function createService(stage) {
 }
 
 function emptyState() {
-  return { users: {}, restaurants: {}, reservations: {}, series: {}, plans: {}, idem: {} };
+  return {
+    users: Object.create(null),
+    restaurants: Object.create(null),
+    reservations: Object.create(null),
+    series: Object.create(null),
+    plans: Object.create(null),
+    idem: Object.create(null),
+  };
 }
 
 function dispatch(ctx, method, path, query, headers, raw) {
@@ -256,7 +263,7 @@ function sameJson(a, b) {
 function canon(value) {
   if (Array.isArray(value)) return value.map(canon);
   if (value && typeof value === "object") {
-    const out = {};
+    const out = Object.create(null);
     for (const key of Object.keys(value).sort()) out[key] = canon(value[key]);
     return out;
   }
@@ -371,7 +378,7 @@ function resolveLocal(zone, local) {
 }
 
 function policyZero(restaurant) {
-  const capacities = {};
+  const capacities = Object.create(null);
   for (const table of restaurant.tables) capacities[table.id] = table.capacity;
   return {
     policy_version: 0,
@@ -1226,7 +1233,7 @@ function validatePolicy(restaurant, body) {
   if (keys.length !== ids.length || ids.some((id) => !Object.prototype.hasOwnProperty.call(body.capacities, id))) {
     return { error: fail(422, "validation_failed", "capacities must name exactly the restaurant's tables") };
   }
-  const capacities = {};
+  const capacities = Object.create(null);
   for (const id of ids) {
     const value = body.capacities[id];
     if (!isInt(value) || value < 1 || value > 100) {
@@ -1375,9 +1382,10 @@ function importState(body) {
   if (!state.users || !state.restaurants || !state.reservations) {
     return { error: fail(422, "validation_failed", "The import is missing state") };
   }
-  state.series ||= {};
-  state.plans ||= {};
-  state.idem ||= {};
+  // structuredClone returns ordinary objects; restore safe lookup maps on import.
+  for (const key of ["users", "restaurants", "reservations", "series", "plans", "idem"]) {
+    state[key] = Object.assign(Object.create(null), state[key] || {});
+  }
   for (const user of Object.values(state.users)) {
     user.tokens ||= [];
     if (!user.emailKey && isString(user.email)) user.emailKey = user.email.toLowerCase();

@@ -1,1 +1,7 @@
 node_modules/
+
+.env
+.env.*
+*.pem
+*secret*
+*api-key*

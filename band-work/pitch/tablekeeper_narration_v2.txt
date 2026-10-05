@@ -1,0 +1,17 @@
+Tablekeeper is a calm way to book a restaurant table. Search, book, move, and cancel. Everything you are about to see is a live recording of the deployed app.
+
+This is the live site. The note at the top confirms that the live agents are connected. Three AI seats, a coordinator, an implementer, and a reviewer, each add a short note as every step happens.
+
+Maya wants dinner at The Late Room on Saturday the tenth of October, for two. She searches, and the open times come straight back. Each time shows only the tables that are really free. She picks seven o'clock, by the window, and the panel on the right confirms her choice before anything is booked.
+
+To book, she needs an account. Tablekeeper sends her to sign up, and here is the important part. Her table stays selected the whole time. She enters her name and email, creates the account, and lands right back on the same table, at the same time, ready to confirm. No starting over.
+
+One tap confirms the reservation. The three agent seats each report what happened, in plain language. There is no reference code to copy down.
+
+Her evening now lives under My bookings. Everything she has reserved sits in one list, ready to open, change, or cancel. She opens the booking to make a change.
+
+Plans change. She would rather sit later, at the banquette. The move screen only offers tables that are actually free. She picks eight o'clock, saves, and the agents confirm the move. The old table is released, and the new one is held.
+
+Then the night is called off. She chooses cancel, and Tablekeeper asks her to confirm. She can still keep the reservation, and at first she does. Then she cancels for real. The booking is marked cancelled, and the table is free again for someone else.
+
+Search. Book. Move. Cancel. Tablekeeper keeps every reservation clear and calm. The code is open on GitHub, and the live demo link is in the readme.

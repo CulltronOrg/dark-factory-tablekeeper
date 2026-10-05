@@ -4,5 +4,6 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 COPY src ./src
 ENV PORT=8080
+ENV DEMO=1
 EXPOSE 8080
 CMD ["node", "src/server.mjs"]

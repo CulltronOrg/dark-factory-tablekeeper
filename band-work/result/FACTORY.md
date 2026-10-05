@@ -4,7 +4,7 @@ Status of this file: **the judged run has not happened.** Costs, review findings
 
 ## What is done
 
-A spec-faithful Tablekeeper service exists in four stage folders. In this workspace it was checked, in host mode, against the published harness. See the handoff at the bottom for the last commands and results. Docker is not installed here, so gate 3 (isolated build) was not run. Band Desktop is not installed here, so gates 1 and 2 have no real room.
+A spec-faithful Tablekeeper service exists in four stage folders. Earlier revisions were checked, in host mode, against the published harness. The 4 October dictionary fix has only focused local checks; the harness has not been rerun on that edit. See the handoff at the bottom for the recorded commands and results. Docker is not installed here, so gate 3 (isolated build) was not run. Band Desktop is not installed here, so gates 1 and 2 have no real room.
 
 ## Seat roster
 
@@ -47,11 +47,11 @@ Host mode only, published harness, after the edge-case edits in this session (mi
 | `band-work/checks/after-edges-s3-overshoot` | stage-3 on :8083, previous stage-2 on :8082, stage 4 only. Run `ae0e2259789040288bcd40abf7c0a536` | fail 4/6 passed, 2 failed, 0 errors. Series amend and `POST /restaurants/r_anker/replans` are 404. Highest contiguous stage 0 because stage 4 was the only stage requested |
 | `band-work/checks/rerun-20261004` | stage-4 on :8080, previous stage-3 on :8083, stages 1–4, after the lookup change form started following party, date and time without waiting for blur, and seat counts from the policy for that date. Run `9cb59e2c6e26422fab88b0055f60e2bd`, 2026-10-03T23:24:36Z–23:25:28Z | pass 120, 25, 7, 6. Highest contiguous stage 4. `claimed_stage` null. Isolated mode was not run |
 
-Older directories under `band-work/checks/` are from earlier engine revisions. They are not the measurement for this tree. The `rerun-20261004` row is a later host-mode run of the same published harness against this tree.
+Older directories under `band-work/checks/` are from earlier engine revisions. The `rerun-20261004` row is a later host-mode run of the same published harness. All recorded harness runs predate the 4 October dictionary fix; none measures the current engine files.
 
 An in-process probe of the stage-4 engine printed `probe ok`. It covered login field types, a normal three-date series amend, replan ranking onto the tighter table, and seed rejection that leaves the previous booking in place. A POST larger than 2_000_000 bytes to :8080 returned 400 `malformed_request`. `GET /` on :8081 returned 401. `GET /` on :8080 returned 200 `text/html` (28476 bytes). At a 375px viewport, signing in, searching party 6, and booking Window + Banquette showed both labels in the summary and in `confirmation-tables`, and `scrollWidth` was 375. That combo check was not repeated at a desktop width in this session.
 
-`python -m harness check` on this tree reports one problem: `room.json` is missing.
+The recorded `python -m harness check` reported one problem: `room.json` was missing. That file is still absent; the check was not rerun here because the challenge harness is unavailable.
 
 ## What the factory has not done
 
@@ -97,6 +97,7 @@ DONE
 - Generic mandates with UNCONFIGURED harness/model lines.
 - In-process probe printed `probe ok` (login types, series amend, replan rank, seed rejection).
 - Published harness, host mode, after those edits: see “What was measured on 3 October 2026”.
+- On 4 October, fixed dictionary handling for accepted IDs such as `__proto__` in all four stages. Focused in-process stage-4 checks passed for reset, list, export/import, table capacity, and canonical JSON comparison. All stage modules passed `node --check`. The published harness was not rerun after this fix.
 
 CURRENT STAGE
 Reference behavior is stage 4. Claimed judged stage: none.
@@ -107,6 +108,7 @@ No judged revision. See git log in this repo if a preparation commit exists.
 HARNESS RESULTS
 Host mode only, against a process started with `node src/server.mjs` (Node v20.19.2).
 Stage-4 server, suites 1–4, after the lookup change-form edit: pass 120/25/7/6. Report: band-work/checks/rerun-20261004/report.json. Run `9cb59e2c6e26422fab88b0055f60e2bd`, 2026-10-03T23:24:36Z–23:25:28Z. claimed_stage null. Isolated mode was not run.
+This report predates the 4 October dictionary fix; no published-harness result exists for the current engine files.
 Earlier stage-4 server, suites 1–4: pass 120/25/7/6. Report: band-work/checks/after-edges-s4/report.json.
 Stage-1 server, suite 1: pass 120/120. Report: band-work/checks/after-edges-s1/report.json.
 Stage-2 server, suite 3: fail 1 passed, 6 failed, 0 errors.
@@ -120,9 +122,9 @@ BLOCKED. No Band Desktop, no Band CLI, no seats, no room.json.
 
 FILES/REPO LOCATION
 /workspace/dark-factory-tablekeeper/band-work/result
-Challenge package used: /tmp/dark-factory-wearedevs
-Harness python: /tmp/df-py/bin/python
-Stage servers in this workspace: stage-1 :8081, stage-2 :8082, stage-3 :8083, stage-4 :8080.
+Challenge package used for the recorded checks: /tmp/dark-factory-wearedevs (not present in this workspace now)
+Harness python used for the recorded checks: /tmp/df-py/bin/python (not present in this workspace now)
+Stage server ports used for the recorded checks: stage-1 :8081, stage-2 :8082, stage-3 :8083, stage-4 :8080.
 
 FAILURES/BLOCKERS
 1. Band Desktop cannot be installed or driven from this sandbox. Without it the entry is not a factory submission.
@@ -140,9 +142,8 @@ After the run:
   python -m harness check <repo> --track tablekeeper
   python -m harness run --track tablekeeper --repo <repo> --all --mode isolated
 
-To re-check this reference tree in host mode, from the challenge checkout, with stage-4 on :8080 and an earlier stage on :8083:
-  cd /tmp/dark-factory-wearedevs
-  /tmp/df-py/bin/python -m harness run \
+To re-check this reference tree in host mode, obtain the challenge checkout and its harness environment, then start stage-4 on :8080 and stage-3 on :8083. From the challenge checkout, run:
+  python -m harness run \
     --track tablekeeper --base-url http://127.0.0.1:8080 --stages 1 2 3 4 \
     --previous-base-url http://127.0.0.1:8083 --out /tmp/nightshift-rerun
 

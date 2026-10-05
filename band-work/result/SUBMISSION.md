@@ -1,51 +1,44 @@
-# LabLab copy
+# LabLab submission copy
 
-Do not submit until `FACTORY.md` says a real room finished and isolated checks passed. The paragraphs below are drafts.
+Use these fields on the LabLab project page. Keep every claim inside what is listed under "Honest status" in the root README.
 
 ## Title
 
-Culltron Nightshift
+Tablekeeper by Culltron (Nightshift)
 
-## Short
+## Short description
 
-A three-seat Band factory that plans, builds, and rejects its own work. Nightshift is the proof: a reservation book that will not hold the same table twice.
+A restaurant booking app where you search, book, move, and cancel a table, and three AI agent seats (coordinator, implementer, reviewer) explain each step live.
 
-## Long
+## Long description
 
-Nightshift is a restaurant reservation service built as the workload for a reusable software factory in Band Desktop.
+Tablekeeper is a calm reservation app for one restaurant book. A diner searches for a time and party size and sees only the tables that are really free. The table she picks stays selected while she signs up or signs in, so she never starts over. Bookings need no reference code: they live under My bookings, where she can move to another time or table, or cancel with a confirm step and a Keep reservation option.
 
-Three seats share one room. The coordinator only hands out complete requirements. The implementer owns the service and its image. The reviewer builds that revision from scratch, runs the official checks, and adds at least one check the implementer did not choose. A stage is accepted only when the reviewer names the revision they actually ran. The human dispatches a stage and then stops.
+After every search, booking, move, and cancellation, three agent seats (coordinator, implementer, reviewer) each return a short note from a live model (gpt-5-mini on Azure OpenAI). The reservation engine stays the only authority: it validates every action once, prevents double bookings, and handles joined tables, retries, and restaurant-local times. If the model provider fails or runs out of credits, the app keeps working and clearly shows that the seats are simulated.
 
-The product covers search, booking, change, and cancel; idempotent retries; combined tables; a browser flow that survives a lost response; dated booking policies; history; recurring reservations; and a manager's preview-then-apply seating repair when a table is closed. Tables stay free of double bookings under concurrent requests. Local times follow Europe/Berlin and America/New_York, including the 2026 daylight-saving transitions.
+Only the action name and its result are sent to the model. No diner details, references, or session tokens leave the service, and keys are read from the environment only.
 
-The running image does not call the network. Fonts, code, and dependencies are inside the container.
+The service passes 68 local tests and is deployed on Azure Container Apps. It is a reference build for the Tablekeeper track, not a judged Band room run.
+
+## Links
+
+- Live demo: https://tablekeeper-booking.ashyisland-1f4bbbad.eastus.azurecontainerapps.io/
+- Repository: https://github.com/CulltronOrg/dark-factory-tablekeeper
+- Video: https://youtu.be/6mPcC5qp_Og
+- How to test: see "What judges need to do" in the repository README.
 
 ## Tags
 
-`band` `multi-agent` `dark-factory` `reservations` `nodejs`
+`multi-agent` `reservations` `azure-openai` `nodejs` `band`
 
-## Cover
+## Media
 
-Paper background `#f3eee6`, oxblood wordmark `#7c2f2a`, one line under it: "Tables, held once." No screenshot of a dashboard grid. A single set table at night is enough if you shoot one. Do not use another company's reservation UI as the image.
+- Cover: `band-work/pitch/tablekeeper-cover.jpg`
+- Deck: `band-work/pitch/tablekeeper-pitch.pptx`
+- Video: about 2.5 minutes, a live recording of search, book, move, and cancel with narration.
 
-## Video
+## Do not claim
 
-The video is a disqualification if it does not show the real Band Desktop room that produced the submitted code. Do not cut in a mock transcript.
-
-Shot list for whoever records. Timecodes are durations, not claims about a recording that does not exist yet.
-
-1. 10–15s. Say the problem in one sentence, then: "We built the factory, not only the app."
-2. Band Desktop with the three seats visible in the room: coordinator, implementer, reviewer.
-3. A real handoff: coordinator message that `@[[…]]` mentions the implementer, and a reply the other way. If a rejection happened, show that too. Do not scroll past it.
-4. The accepted revision the reviewer named, and the stage folders in the repo.
-5. Nightshift in the browser: search, an available cell, a confirmation reference, then lookup. If you can, show a second booking of the same table failing.
-6. The isolated harness summary on screen, including the claimed stage line. If a stage did not claim, say the line that printed.
-7. One sentence on measured time and cost from the run, and one limitation you actually hit.
-
-Record the room first, while it is still open. Export `room.json` after the recording so the download does not change what you filmed.
-
-## What not to say on the form
-
-- Do not claim a stage the isolated harness did not claim.
-- Do not quote a model id, a token cost, or a runtime you did not measure.
-- Do not describe this reference tree as agent-written if the room did not produce it.
+- A judged Band room run, a `room.json`, or an isolated harness pass.
+- Any model id, cost, or runtime that was not measured.
+- That the code was written autonomously by a Band factory.

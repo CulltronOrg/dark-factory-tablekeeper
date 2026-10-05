@@ -3,185 +3,366 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Nightshift — a table, held</title>
+  <title>Nightshift — Good evenings start at a table</title>
+  <meta name="theme-color" content="#762d35">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23762d35'/%3E%3Cpath d='M16 45h32M20 45V30a12 12 0 0 1 24 0v15' fill='none' stroke='%23faf4e7' stroke-width='3'/%3E%3C/svg%3E">
+  <meta name="description" content="Find your table, make an evening of it. Book, move, and manage your restaurant reservations with Nightshift.">
   <style>
-    :root {
-      --ink: #1c1612;
-      --paper: #f3eee6;
-      --card: #fbf7f1;
-      --line: #e2d6c8;
-      --muted: #5c5148;
-      --oxblood: #7c2f2a;
-      --oxblood-ink: #fff8f2;
-      --shadow: 0 18px 40px rgba(28, 22, 18, 0.08);
-      --serif: "Literata", Georgia, serif;
-      --sans: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
-    }
-    @font-face {
-      font-family: "Literata";
-      src: url("/fonts/literata-400.woff2") format("woff2");
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: "Literata";
-      src: url("/fonts/literata-700.woff2") format("woff2");
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: "Outfit";
-      src: url("/fonts/outfit-400.woff2") format("woff2");
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: "Outfit";
-      src: url("/fonts/outfit-600.woff2") format("woff2");
-      font-weight: 600;
-      font-style: normal;
-      font-display: swap;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(1200px 500px at 10% -10%, rgba(124, 47, 42, 0.08), transparent 50%),
-        var(--paper);
-      color: var(--ink);
-      font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.5;
-    }
-    button, input, select { font: inherit; color: inherit; }
-    button, [role="button"] { cursor: pointer; }
-    :focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
-    a { color: inherit; }
-    .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; }
-    header.top {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; padding: 22px 0 8px; flex-wrap: wrap;
-    }
-    .brand { text-decoration: none; display: flex; flex-direction: row; align-items: center; gap: 12px; }
-    .brand-text { display: flex; flex-direction: column; }
-    .mark { width: 36px; height: 36px; flex: none; }
-    .brand b { font-family: var(--serif); font-size: 28px; font-weight: 700; letter-spacing: -0.04em; line-height: 1; }
-    .brand span { color: var(--muted); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; }
-    nav { display: flex; gap: 18px; align-items: center; }
-    nav a { text-decoration: none; font-size: 14px; letter-spacing: 0.04em; }
-    nav a[aria-current="page"] { box-shadow: inset 0 -1px 0 var(--ink); }
-    .who { display: flex; align-items: center; gap: 10px; }
-    #current-user, [data-testid="current-user"] {
-      font-family: var(--serif); font-size: 18px;
-    }
-    .ghost, .solid, .cell, a.ghost {
-      border: 1px solid var(--ink); background: transparent; min-height: 44px;
-      padding: 0 16px; border-radius: 999px;
-    }
-    a.ghost, a.solid { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
-    a.solid { background: var(--oxblood); color: var(--oxblood-ink); border-color: var(--oxblood); }
-    .solid { background: var(--oxblood); color: var(--oxblood-ink); border-color: var(--oxblood); }
-    .solid:hover { background: #641f1c; }
-    main { padding: 12px 0 64px; }
-    .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: end; margin: 18px 0 22px; }
-    h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(40px, 6vw, 72px); letter-spacing: -0.045em; line-height: 0.92; margin: 0; }
-    .lede { color: var(--muted); max-width: 36ch; margin: 12px 0 0; }
-    .panel, .ticket, .auth-card {
-      background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow);
-    }
-    .panel { padding: 16px; display: grid; gap: 12px; }
-    .fields { display: grid; grid-template-columns: 1.15fr 0.7fr auto; gap: 10px; align-items: end; }
-    .fields label:first-child { grid-column: 1 / -1; }
-    label { display: grid; gap: 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-    input, select {
-      width: 100%; min-height: 44px; border-radius: 12px; border: 1px solid var(--line);
-      background: #fff; padding: 0 12px;
-    }
-    .status-line { min-height: 1.4em; color: var(--muted); font-size: 14px; }
-    .slot-block {
-      display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; align-items: start;
-      margin: 0; padding: 16px 0; border-top: 1px solid var(--line);
-    }
-    .slot-block h2 { font-family: var(--serif); font-size: 32px; margin: 0; letter-spacing: -0.03em; line-height: 1; }
-    .cells { display: flex; flex-wrap: wrap; gap: 8px; }
-    .cell { border-radius: 14px; text-align: left; background: #fff; min-width: min(100%, 168px); max-width: 100%; white-space: normal; padding: 10px 12px; }
-    .cell small { display: block; color: var(--muted); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
-    .cell strong { font-family: var(--serif); font-size: 20px; font-weight: 700; }
-    .cell[data-available="true"] { box-shadow: inset 3px 0 0 var(--oxblood); }
-    .cell[data-available="false"] { color: #4f453d; background: transparent; border-style: dashed; box-shadow: none; }
-    .cell[data-available="false"] small { color: #5c5148; }
-    .cell.is-selected, .cell.is-selected[data-available="true"] {
-      background: var(--oxblood); color: var(--oxblood-ink); border-color: var(--oxblood); box-shadow: none;
-    }
-    .cell.is-selected small { color: #fff8f2; }
-    .combo[data-available="true"] { background: #f6efe4; }
-    #booking-form.ticket, .ticket { margin-top: 8px; padding: 20px 18px 16px; border-top: 6px solid var(--oxblood); }
-    #booking-summary { font-family: var(--serif); font-size: clamp(26px, 4vw, 34px); letter-spacing: -0.03em; line-height: 1.05; margin: 0 0 12px; }
-    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: end; }
-    .banner { margin-top: 12px; padding: 12px 14px; border-radius: 12px; }
-    .banner.bad { background: #f8e7e2; border: 1px solid #e2b2aa; color: #641f1c; }
-    .banner.unsure { background: #f4ead2; border: 1px solid #c4a15a; color: #3d3118; }
-    .banner.ok { background: #e7f2e4; border: 1px solid #8eae90; color: #1d3a22; }
-    .change-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-    .rules { margin: 0; color: var(--muted); font-size: 14px; }
-    .history { display: grid; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
-    .history li { font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 6px; }
-    .ref {
-      font-family: var(--serif); font-size: clamp(28px, 8vw, 44px); letter-spacing: 0.08em;
-      margin: 0; overflow-wrap: anywhere;
-    }
-    .quiet { color: var(--muted); }
-    .auth-card { max-width: 460px; padding: 22px; display: grid; gap: 12px; }
-    .auth-card h1 { font-size: 48px; }
-    .empty {
-      padding: 28px 8px; color: var(--muted); font-family: var(--serif); font-size: 28px; letter-spacing: -0.03em;
-    }
-    .night {
-      margin: 8px 0 0; font-family: var(--serif); font-size: clamp(26px, 4vw, 36px);
-      letter-spacing: -0.03em; line-height: 1.05;
-    }
-    .badge {
-      display: inline-block; width: fit-content; margin: 0;
-      padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line);
-      letter-spacing: 0.12em; text-transform: uppercase; font-size: 12px;
-    }
-    .badge[data-status="cancelled"] { color: #641f1c; border-color: #e2b2aa; background: #f8e7e2; }
-    .badge[data-status="confirmed"] { color: #1d3a22; border-color: #8eae90; background: #e7f2e4; }
-    .sheet { max-width: 820px; }
-    .sheet h1 {
-      font-family: var(--serif); font-weight: 700; font-size: clamp(40px, 6vw, 64px);
-      letter-spacing: -0.045em; line-height: 0.92; margin: 0;
-    }
-    .hint { margin: 0; }
-    .facts { color: var(--muted); font-size: 14px; margin: 0; }
-    h2.section { font-family: var(--serif); font-size: 32px; letter-spacing: -0.03em; margin: 28px 0 8px; }
-    .ref-sm { font-size: 28px; letter-spacing: 0.06em; }
-    .mine-row { margin-top: 10px; }
-    .cell strong, .ref, .lede, .facts, .ticket p { overflow-wrap: anywhere; }
-    .next { display: inline-flex; margin-top: 8px; }
-    .colophon {
-      color: var(--muted); font-family: var(--serif); font-size: 18px;
-      letter-spacing: -0.03em; padding: 8px 0 36px;
-    }
-    .status-line.is-loading { color: var(--ink); }
-    @media (max-width: 800px) {
-      .hero, .fields, .change-grid { grid-template-columns: minmax(0, 1fr); }
-      .fields .solid, .row .solid, .sheet .solid { width: 100%; }
-      .slot-block { grid-template-columns: minmax(0, 1fr); }
-      h1 { font-size: 44px; }
-      .wrap { width: min(1080px, calc(100% - 24px)); }
-      .slot-block h2 { font-size: 28px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      * { transition: none !important; }
-    }
+@font-face{font-family:Literata;src:url('/fonts/literata-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:Literata;src:url('/fonts/literata-700.woff2') format('woff2');font-style:normal;font-weight:700;font-display:swap}
+@font-face{font-family:Outfit;src:url('/fonts/outfit-400.woff2') format('woff2');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:Outfit;src:url('/fonts/outfit-600.woff2') format('woff2');font-style:normal;font-weight:600;font-display:swap}
+:root{
+  --ink:#272822;--paper:#f7f4ed;--card:#fffdf8;--line:#dedfd3;--muted:#686b60;
+  --oxblood:#692e37;--oxblood-ink:#fffaf2;--sage:#dfe8d8;--forest:#39523b;
+  --shadow:0 8px 24px #34372b06;--serif:Literata,Georgia,serif;
+  --sans:Outfit,'Avenir Next','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+html,body{margin:0;padding:0}
+body{min-width:320px;min-height:100vh;background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+button,a,input,select{-webkit-tap-highlight-color:transparent}
+button,[role=button]{cursor:pointer}
+button{transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease}
+button:disabled{cursor:not-allowed}
+a{color:inherit;text-underline-offset:4px}
+a:hover{color:var(--oxblood)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #809370;outline-offset:4px}
+::selection{color:var(--ink);background:#dce6d2}
+[hidden]{display:none!important}
+.wrap{width:min(1180px,calc(100% - 80px));margin-inline:auto}
+header.top{min-height:102px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0}
+.mark{height:40px;width:40px;flex:none}
+.brand-text{display:flex;flex-direction:column;gap:5px}
+.brand b{font:700 25px/1 var(--serif);letter-spacing:-1.15px;color:var(--oxblood)}
+.brand .brand-text>span{font-size:9px;line-height:1.3;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+nav{display:flex;align-items:center;gap:30px;margin-left:auto}
+nav a{position:relative;padding:11px 0;text-decoration:none;font-size:14px;color:var(--muted);white-space:nowrap}
+nav a[aria-current=page]{color:var(--ink)}
+nav a[aria-current=page]::after{content:'';position:absolute;bottom:4px;left:0;right:0;height:2px;background:var(--oxblood)}
+.who{display:flex;align-items:center;gap:12px;min-width:0}
+.who:empty{display:none}
+#current-user,[data-testid=current-user]{font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who .ghost{font-size:12px;min-height:36px;padding:0 13px}
+.ghost,.solid,.cell,a.ghost,a.solid{border:1px solid var(--line);background:transparent;min-height:46px;padding:0 20px;border-radius:5px;font-size:14px;font-weight:600;letter-spacing:.1px}
+a.ghost,a.solid{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.solid,a.solid{background:var(--oxblood);border-color:var(--oxblood);color:var(--oxblood-ink)}
+.solid:hover,a.solid:hover{background:#51202a;border-color:#51202a;color:var(--oxblood-ink)}
+.solid:active,.ghost:active{transform:translateY(1px)}
+.ghost:hover,a.ghost:hover{background:#eeeee4;border-color:#aeb5a3;color:var(--ink)}
+.solid:disabled{background:#9c8283;border-color:#9c8283;color:#fffdf8}
+.ghost:disabled{opacity:.6}
+main{padding:0 0 76px;min-height:calc(100vh - 204px)}
+.hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:56px;align-items:center;padding:60px 0 46px;margin:0}
+.eyebrow{display:block;font:600 10px/1.5 var(--sans);text-transform:uppercase;letter-spacing:2.3px;color:var(--forest);margin:0 0 18px}
+.eyebrow::before{content:'';display:inline-block;width:21px;height:1px;background:currentColor;vertical-align:middle;margin-right:10px}
+h1{font:400 clamp(44px,5.2vw,65px)/1.13 var(--serif);letter-spacing:-2.5px;margin:0;max-width:11ch}
+.lede{font-size:16px;color:var(--muted);max-width:40ch;margin:22px 0 0;line-height:1.7}
+.hero-art{position:relative;align-self:stretch;display:flex;align-items:center;justify-content:center;min-width:0}
+.hero-art svg{display:block;width:100%;height:auto;max-height:270px;overflow:visible}
+.hero-art .art-caption{position:absolute;bottom:2px;left:0;right:0;text-align:center;font-size:10px;color:var(--muted);letter-spacing:1.3px;text-transform:uppercase}
+.panel,.ticket,.auth-card{background:var(--card);border:1px solid var(--line);border-radius:7px;box-shadow:var(--shadow)}
+.panel{padding:22px 24px;display:grid;gap:13px}
+.search-panel{position:relative;margin:0 0 40px}
+.fields{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.2fr) minmax(90px,.65fr) minmax(150px,1fr);gap:16px;align-items:end}
+.fields label:first-child{grid-column:auto}
+label{display:grid;gap:7px;font-size:10px;font-weight:600;letter-spacing:1.3px;text-transform:uppercase;color:var(--muted);min-width:0}
+input,select{display:block;min-width:0;width:100%;height:48px;min-height:48px;border-radius:4px;border:1px solid #d8dccf;background:#fffefb;padding:0 13px;font-size:14px;line-height:normal;font-weight:400;letter-spacing:0;text-transform:none;transition:border-color .16s ease}
+input:hover,select:hover{border-color:#9fa88f}
+input:focus,select:focus{border-color:#6c805d}
+input[type=date]{max-width:100%;appearance:auto}
+input[type=number]{appearance:auto}
+input::placeholder{color:#929588;opacity:1}
+.fields>.solid{min-height:48px;padding-inline:18px}
+.status-line{color:var(--muted);font-size:13px;line-height:1.5}
+.status-line:empty{display:none}
+.status-line.is-loading{color:var(--forest)}
+.status-line.is-loading::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#7c936a;margin-right:8px;animation:breathing 1.2s ease-in-out infinite}
+.agent-demo{margin-top:22px;padding:16px 20px;border:1px solid #dacc99;border-radius:7px;background:#f7eed9;font-size:13px;overflow-wrap:anywhere}
+.agent-demo p{margin:0 0 8px}
+.agent-demo .agent-trace{margin-top:12px;padding-top:10px;border-top:1px solid #dacc99}
+.agent-demo ol{margin:4px 0 0;padding-left:22px}
+.agent-demo li{margin:3px 0}
+.facts{color:var(--muted);font-size:12px;line-height:1.6;margin:0}
+.search-panel>.facts{border-top:1px solid #e9e9df;padding-top:13px}
+.search-panel>.facts:empty{display:none}
+.booking-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:36px;align-items:start}
+#results,#hold{min-width:0}
+#hold{position:sticky;top:24px}
+#hold:empty{display:none}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 12px}
+.section-heading h2{font:400 25px/1.3 var(--serif);letter-spacing:-.65px;margin:0}
+.section-heading .quiet,.section-heading p{font-size:12px;margin:0}
+.night{font:400 clamp(22px,2.1vw,28px)/1.4 var(--serif);letter-spacing:-.75px;margin:0 0 7px}
+#results>.facts{margin-bottom:20px}
+.time-filters{display:flex;flex-wrap:wrap;gap:7px;margin:20px 0 24px}
+.time-filters button,.time-filter{font-size:12px;min-height:34px;border:1px solid var(--line);border-radius:30px;background:transparent;padding:6px 15px;color:var(--muted)}
+.time-filters button:hover{border-color:#98a38a;background:#eeefe6;color:var(--ink)}
+.time-filters button[aria-pressed=true],.time-filters button.is-active,.time-filter.is-active{background:var(--forest);border-color:var(--forest);color:#fffef7}
+.slot-block{display:grid;grid-template-columns:65px minmax(0,1fr);gap:18px;align-items:start;margin:0;padding:22px 0;border-top:1px solid var(--line)}
+.slot-block h2{font:400 24px/1.3 var(--serif);letter-spacing:-.5px;margin:8px 0 0;font-variant-numeric:tabular-nums}
+.cells{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:9px;min-width:0}
+.cell{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-height:102px;min-width:0;max-width:100%;width:100%;padding:13px 14px;text-align:left;background:#fffdf9;white-space:normal;font-weight:400;border-color:#c7d2bf}
+.cell small{display:block;font:400 10px/1.5 var(--sans);letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.cell small:first-child{font-size:9px;letter-spacing:1px;color:var(--forest)}
+.cell small:first-child::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:#688357;vertical-align:middle;margin-right:5px}
+.cell strong{font:400 19px/1.45 var(--serif);letter-spacing:-.35px;overflow-wrap:anywhere}
+.cell[data-available=true]:hover{background:#edf2e8;border-color:#799366}
+.cell[data-available=false]{border-color:#e3e3d8;background:#f0f0e9;color:#787c70;box-shadow:none}
+.cell[data-available=false] small{color:#838679}
+.cell[data-available=false] small:first-child::before{background:#a5a99c}
+.cell.is-selected,.cell.is-selected[data-available=true]{background:var(--forest);border-color:var(--forest);color:#fffdf5;box-shadow:0 0 0 1px var(--forest)}
+.cell.is-selected small,.cell.is-selected small:first-child{color:#e9efde}
+.cell.is-selected small:first-child::before{background:#c4d7b3}
+.combo[data-available=true]{background:#f0f3e9}
+.hold-placeholder{padding:28px 25px;background:#e9edde;border:1px solid #d8dfcc;border-radius:7px}
+.hold-placeholder .eyebrow{margin-bottom:22px;color:#556447}
+.hold-placeholder h2{font:400 27px/1.3 var(--serif);letter-spacing:-.8px;margin:0 0 13px}
+.hold-placeholder p{color:#5c6552;font-size:13px;line-height:1.7;margin:0 0 20px}
+.hold-placeholder>svg{display:block;width:44px;height:44px;margin:0 0 20px;color:var(--forest)}
+.promise-list{display:grid;gap:12px;list-style:none;padding:20px 0 0;margin:22px 0 0;border-top:1px solid #cdd7bf;font-size:12px;color:#4f6046}
+.promise-list li{display:flex;gap:9px;align-items:flex-start}
+.promise-list li::before{content:'✓';font-size:12px;color:#547344}
+.ticket{padding:25px;margin-top:12px;display:grid;gap:15px;border-top:3px solid var(--forest)}
+#hold>.ticket{margin-top:0}
+.ticket p{margin:0}
+.ticket>.row{margin:3px 0}
+.ticket .row label{flex:1;min-width:90px}
+.ticket .row .solid{flex:1;white-space:nowrap}
+#booking-summary,[data-testid=booking-summary]{font:400 25px/1.4 var(--serif);letter-spacing:-.65px;margin:0 0 6px;overflow-wrap:anywhere}
+#hold .row{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+#hold .row .solid{width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.banner{font-size:13px;line-height:1.6;margin-top:12px;padding:12px 14px;border-radius:4px}
+.banner.bad{background:#f7eae5;border:1px solid #e6c8c0;color:#773932}
+.banner.unsure{background:#f7eed9;border:1px solid #dacc99;color:#715c27}
+.banner.ok{background:#e9f0e2;border:1px solid #c0d2b4;color:#395b2d}
+.change-grid{display:grid;grid-template-columns:.65fr 1.2fr 1fr;gap:14px}
+.rules{font-size:12px;line-height:1.7;color:var(--muted);margin:0}
+.hint{margin:0}
+.quiet{color:var(--muted)}
+.history{display:grid;gap:0;list-style:none;margin:20px 0;padding:0}
+.history li{border-top:1px solid var(--line);padding:10px 0;color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+.ref{font:400 clamp(27px,3vw,37px)/1.4 var(--serif);letter-spacing:1px;margin:0;overflow-wrap:anywhere;color:var(--oxblood)}
+.ref-sm{font-size:23px;letter-spacing:.7px}
+.badge{display:inline-flex;align-items:center;gap:6px;width:fit-content;border:1px solid var(--line);border-radius:20px;margin:0;padding:4px 10px;font-size:9px;line-height:1.5;letter-spacing:1px;text-transform:uppercase}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+.badge[data-status=cancelled]{color:#805149;border-color:#dfcbc2;background:#f7ede6}
+.badge[data-status=confirmed]{color:#446437;border-color:#c7d9bc;background:#eff5e9}
+.next{display:inline-flex;margin-top:10px}
+[data-testid=confirmation]{margin-top:6px;padding-top:23px;border-top:1px dashed #c8cebd}
+[data-testid=confirmation]>.quiet{font-size:10px;letter-spacing:1.7px;text-transform:uppercase;margin-bottom:7px}
+[data-testid=confirmation-details]{margin:13px 0!important;color:var(--muted);font-size:13px;line-height:1.75}
+[data-testid=confirmation-tables]{font-size:12px;color:var(--forest)}
+[data-testid=confirmation] .next{width:100%;margin-top:18px}
+.empty{border:1px dashed #ccd3c0;border-radius:6px;padding:45px 28px;font:400 24px/1.5 var(--serif);letter-spacing:-.5px;color:var(--muted);background:#f0f1e7;text-align:center;margin:0}
+.empty p{font:400 13px/1.7 var(--sans);letter-spacing:0;margin:12px 0 0}
+.empty h2{color:var(--ink);font:400 28px/1.35 var(--serif);margin:0}
+h2.section{font:400 30px/1.3 var(--serif);letter-spacing:-.8px;margin:42px 0 18px}
+#mine{margin-top:26px}
+#mine:empty{display:none}
+#mine>.quiet{font-size:14px}
+.mine-row{margin-top:12px}
+.mine-row .row{gap:8px;margin-top:3px}
+.mine-row .row .ghost{font-size:12px;min-height:38px;padding:0 15px}
+.mine-row>p:not(.ref):not(.badge){font-size:13px;line-height:1.65;color:var(--muted)}
+.booking-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0}
+.booking-list>.ticket{margin:0}
+.booking-list>.empty,.booking-list>.quiet,.booking-list>h2{grid-column:1/-1}
+.lookup-shell{max-width:960px;margin:54px auto 0}
+.lookup-heading{max-width:610px;margin-bottom:28px}
+.lookup-heading h1{font-size:48px;max-width:none;line-height:1.18;letter-spacing:-1.8px}
+.lookup-heading p:not(.eyebrow){color:var(--muted);font-size:15px;max-width:51ch;margin:16px 0 0}
+.lookup-search{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:end;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+.lookup-search .solid{min-height:48px;padding-inline:26px}
+.lookup-search input{text-transform:uppercase;letter-spacing:1px}
+.lookup-content{margin-top:24px}
+.lookup-content:empty{display:none}
+[data-testid=reservation-detail]{background:var(--card);border:1px solid var(--line);border-radius:7px;padding:26px}
+[data-testid=reservation-detail]>p{margin:0 0 12px}
+[data-testid=reservation-detail]>p:not([data-testid]){font-size:14px;color:var(--muted)}
+[data-testid=reservation-status]{display:inline-flex;width:fit-content;background:#edf2e5;border:1px solid #cddabd;border-radius:20px;padding:4px 11px;color:#4b6440;font-size:10px;letter-spacing:1.3px;text-transform:uppercase}
+[data-testid=reservation-tables]{font:400 29px/1.35 var(--serif);letter-spacing:-.6px}
+[data-testid=reservation-cancel-button]{color:var(--oxblood);font-size:12px;min-height:38px;margin-top:2px;padding:0 15px}
+[data-testid=reservation-cancel-button]:hover{background:#f8eae6;border-color:#dbbdb7}
+[data-testid=change-form]{margin:26px 0 0;background:#f8f8f1;box-shadow:none;border-top:1px solid var(--line);padding:24px}
+[data-testid=change-form]>.quiet{font:400 23px/1.4 var(--serif);letter-spacing:-.5px;color:var(--ink)}
+[data-testid=change-form]>.solid{justify-self:start;padding:0 25px;margin-top:4px}
+[data-testid=change-seats]{margin-top:7px;grid-template-columns:repeat(auto-fill,minmax(135px,1fr))}
+.auth-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,430px);gap:90px;align-items:center;max-width:990px;margin:70px auto 32px}
+.auth-intro h1{font-size:55px;line-height:1.16;max-width:11ch}
+.auth-intro h2{font:400 45px/1.2 var(--serif);letter-spacing:-1.6px;max-width:12ch;margin:0}
+.auth-intro>p:not(.eyebrow){max-width:37ch;line-height:1.75;color:var(--muted);margin:22px 0 0}
+.auth-intro .promise-list{border-color:var(--line);max-width:300px;gap:14px;margin-top:30px}
+.auth-card{width:100%;max-width:460px;display:grid;gap:19px;padding:32px}
+main>.auth-card{margin:56px auto}
+.auth-card h1,.auth-card h2{font:400 35px/1.25 var(--serif);letter-spacing:-1.1px;margin:0;max-width:none}
+.auth-card>p{font-size:13px;line-height:1.7;margin:-6px 0 2px}
+.auth-card .solid{min-height:48px;margin-top:3px}
+.auth-card>a:not(.solid){font-size:13px;text-align:center;color:var(--muted)}
+.auth-card>a:hover{color:var(--oxblood)}
+.auth-card>div:empty{display:none}
+.auth-card .hint{font-size:11px;margin:-8px 0 0}
+.sheet{max-width:850px;margin:50px auto 0}
+.sheet h1{font:400 clamp(40px,5vw,58px)/1.18 var(--serif);letter-spacing:-1.8px;max-width:none}
+.colophon{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;min-height:92px;border-top:1px solid var(--line);padding:24px 0 30px;color:var(--muted);font-size:12px;letter-spacing:.1px}
+.colophon .footer-brand{font-family:var(--serif);font-size:15px;color:var(--oxblood)}
+.colophon a{font-size:12px}
+.cell strong,.ref,.lede,.facts,.ticket p{overflow-wrap:anywhere}
+@keyframes breathing{0%,100%{opacity:1}50%{opacity:.35}}
+@media(min-width:1440px){.hero{padding-top:68px;padding-bottom:52px}.hero-art svg{max-height:290px}}
+@media(max-width:1050px){
+  .wrap{width:calc(100% - 48px)}
+  .hero{gap:30px;padding-top:48px;padding-bottom:38px}
+  h1{font-size:55px}
+  .booking-layout{grid-template-columns:minmax(0,1fr) 285px;gap:26px}
+  .fields{grid-template-columns:minmax(0,1.4fr) minmax(0,1.2fr) minmax(75px,.6fr) minmax(135px,1fr);gap:12px}
+  .panel{padding:20px}
+  .slot-block{grid-template-columns:58px minmax(0,1fr);gap:12px}
+  .cells{grid-template-columns:repeat(auto-fill,minmax(116px,1fr));gap:8px}
+  .cell{padding:12px}
+  .auth-layout{gap:50px;margin-top:58px}
+  .auth-intro h1{font-size:47px}
+  nav{gap:22px}
+}
+@media(max-width:800px){
+  header.top{min-height:88px;gap:18px;flex-wrap:wrap;padding:18px 0}
+  nav{gap:20px}
+  .who{width:100%;justify-content:flex-end;margin-top:-6px}
+  .hero{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;padding:38px 0 32px}
+  h1{font-size:44px;letter-spacing:-1.7px}
+  .lede{font-size:14px;margin-top:16px}
+  .hero-art svg{max-height:230px}
+  .fields{grid-template-columns:1fr 1fr}
+  .fields label:first-child{grid-column:auto}
+  .booking-layout{grid-template-columns:minmax(0,1fr);gap:28px}
+  #hold{position:static}
+  .hold-placeholder{display:grid;grid-template-columns:1fr 1fr;column-gap:30px;padding:24px}
+  .hold-placeholder .eyebrow{grid-column:1/-1;margin-bottom:14px}
+  .hold-placeholder h2{grid-column:1;grid-row:2}
+  .hold-placeholder>p:not(.eyebrow){grid-column:1;margin:0}
+  .hold-placeholder .promise-list{grid-column:2;grid-row:2/4;border:0;padding:3px 0 0;margin:0;align-content:start}
+  .slot-block{grid-template-columns:62px minmax(0,1fr);gap:16px}
+  .cells{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  #hold .row{grid-template-columns:minmax(100px,1fr) minmax(150px,1.7fr);align-items:end}
+  .auth-layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:30px}
+  .auth-card{padding:25px}
+  .auth-intro h1,.auth-intro h2{font-size:38px}
+  .auth-intro>p:not(.eyebrow){font-size:14px}
+  .lookup-shell{margin-top:42px}
+}
+@media(max-width:580px){
+  .wrap{width:calc(100% - 36px)}
+  header.top{padding:18px 0;gap:18px 12px;min-height:81px}
+  .brand{gap:8px}.brand b{font-size:22px}.mark{width:31px;height:31px}
+  .brand .brand-text>span{font-size:8px;letter-spacing:1.4px}
+  nav{gap:14px}nav a{font-size:11px;padding:7px 0}
+  nav a[aria-current=page]::after{bottom:0}
+  #current-user,[data-testid=current-user]{max-width:200px}
+  .who .ghost{min-height:32px}
+  main{padding-bottom:46px}
+  .hero{grid-template-columns:minmax(0,1fr);gap:26px;padding:35px 0 30px}
+  h1{font-size:46px;line-height:1.15;letter-spacing:-1.9px;max-width:11ch}
+  .eyebrow{font-size:9px;letter-spacing:1.7px;margin-bottom:16px}
+  .lede{max-width:37ch;font-size:14px;line-height:1.7;margin-top:18px}
+  .hero-art{padding:0 18px;min-height:180px;max-height:190px}
+  .hero-art svg{max-height:190px}
+  .hero-art .art-caption{bottom:-6px;font-size:8px}
+  .search-panel{margin-bottom:30px}
+  .panel{padding:19px 17px;gap:13px;border-radius:6px}
+  .fields{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:15px 11px}
+  .fields label:first-child,.fields>.solid{grid-column:1/-1}
+  .fields>.solid{min-height:48px;margin-top:2px}
+  label{font-size:9px;letter-spacing:1.15px}
+  input,select{font-size:16px;height:47px;min-height:47px;padding-inline:11px}
+  .facts{font-size:11px}
+  .search-panel>.facts{padding-top:12px;line-height:1.75}
+  .section-heading{gap:10px;align-items:start}
+  .section-heading h2{font-size:24px}
+  .section-heading .quiet,.section-heading p{font-size:10px;padding-top:6px;max-width:95px;text-align:right}
+  .night{font-size:23px;line-height:1.5;letter-spacing:-.6px}
+  #results>.facts{margin-bottom:18px}
+  .time-filters{gap:6px;margin:18px 0 20px}
+  .time-filters button,.time-filter{font-size:11px;padding:6px 12px;min-height:35px}
+  .slot-block{grid-template-columns:minmax(0,1fr);gap:13px;padding:20px 0}
+  .slot-block h2{font-size:23px;margin:0}
+  .cells{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .cell{min-height:100px;padding:12px 14px}
+  .cell strong{font-size:20px}
+  .cell small{font-size:10px}
+  .hold-placeholder{display:block;padding:25px}
+  .hold-placeholder .eyebrow{margin-bottom:19px}
+  .hold-placeholder>p:not(.eyebrow){margin-bottom:19px}
+  .hold-placeholder .promise-list{border-top:1px solid #cdd7bf;margin-top:21px;padding-top:19px}
+  .hold-placeholder h2{font-size:28px}
+  .ticket{padding:22px 20px;gap:14px}
+  #hold .row{grid-template-columns:minmax(0,1fr)}
+  .empty{padding:34px 20px;font-size:23px}
+  h2.section{font-size:27px;margin-top:32px}
+  .booking-list{grid-template-columns:minmax(0,1fr);gap:12px}
+  .ref{font-size:31px}
+  .ref-sm{font-size:24px}
+  .lookup-shell{margin-top:34px}
+  .lookup-heading{margin-bottom:23px}
+  .lookup-heading h1{font-size:38px;letter-spacing:-1.3px}
+  .lookup-heading p:not(.eyebrow){font-size:14px;margin-top:15px}
+  .lookup-search{grid-template-columns:minmax(0,1fr);padding:20px;gap:16px}
+  .lookup-content{margin-top:20px}
+  [data-testid=reservation-detail]{padding:21px 17px}
+  [data-testid=reservation-tables]{font-size:25px}
+  [data-testid=change-form]{padding:19px 14px;margin-top:24px}
+  .change-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:13px 10px}
+  .change-grid>label:first-child{grid-column:1/-1}
+  [data-testid=change-seats]{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  [data-testid=change-seats] .cell{padding:10px;min-height:101px}
+  [data-testid=change-seats] .cell strong{font-size:18px}
+  [data-testid=change-form]>.solid{justify-self:stretch;width:100%}
+  .auth-layout{grid-template-columns:minmax(0,1fr);gap:28px;margin:36px 0 10px}
+  .auth-intro h1,.auth-intro h2{font-size:40px;max-width:12ch}
+  .auth-intro>p:not(.eyebrow){max-width:38ch;margin-top:17px}
+  .auth-intro .promise-list{display:none}
+  .auth-card{padding:27px 22px;max-width:none;gap:18px}
+  .auth-card h1,.auth-card h2{font-size:31px}
+  main>.auth-card{margin:34px auto}
+  .colophon{font-size:11px;min-height:90px;gap:10px;padding:22px 0}
+  .sheet{margin-top:34px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Product layout details shared by the reservation and account screens. */
+.skip-link{position:fixed;top:12px;left:12px;z-index:10;transform:translateY(-150%);padding:12px 18px;background:var(--ink);color:#fff;border-radius:5px}
+.skip-link:focus{transform:translateY(0);color:#fff}
+.hero h1{max-width:16ch}
+.section-heading{display:block;margin-bottom:24px}
+.section-heading .eyebrow{font-size:10px;margin-bottom:10px}
+.section-heading .night{font:400 28px/1.35 var(--serif);letter-spacing:-.7px;margin-bottom:10px}
+.section-heading .facts{font-size:12px}
+.empty-state{grid-column:1/-1;padding:32px;border:1px dashed var(--line);border-radius:7px;background:#f0f1e7}
+.empty-state .next + .next{margin-left:10px}
+.back-link{display:block;width:fit-content;font-size:13px;margin-bottom:26px;color:var(--muted);text-decoration:none}
+.reservation-sheet>.night{margin-bottom:16px}
+.reservation-sheet>.eyebrow{margin-bottom:10px}
+.booking-history{margin:20px 0;color:var(--muted);font-size:13px}
+.booking-history summary{cursor:pointer;padding:8px 0}
+.cancel-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding-top:24px}
+.cancel-row .rules{flex-basis:100%;margin:0}
+#hold .next{width:100%;white-space:normal;text-align:center;padding:12px}
+#hold .next + .next{background:transparent;border-color:var(--line);color:var(--ink)}
+@media(max-width:580px){
+ .hero{padding:30px 0 28px;gap:0}.hero h1{font-size:40px;max-width:14ch}.hero-art{display:none}
+ .hero .lede{font-size:14px;margin-top:14px}.section-heading p{max-width:none;text-align:left;padding:0}
+ .section-heading .night{font-size:25px}.section-heading .facts{font-size:12px;line-height:1.7}
+ .time-filters button{min-height:44px}.empty-state{padding:24px}.empty-state .next + .next{margin-left:0}
+ nav{gap:12px}.brand b{font-size:21px}.brand .brand-text>span{font-size:7px}
+ .colophon{align-items:flex-start;flex-direction:column;justify-content:center}
+}
   </style>
 </head>
 <body>
+  <a href="#view" class="skip-link">Skip to content</a>
   <div class="wrap">
     <header class="top">
       <a class="brand" href="/">
@@ -191,15 +372,22 @@
         </svg>
         <span class="brand-text"><b>Nightshift</b><span>Tables, held once</span></span>
       </a>
-      <nav>
-        <a href="/" data-nav="/">Reserve</a>
-        <a href="/lookup" data-nav="/lookup">Reference</a>
-        <a href="/login" data-nav="/login" id="account-link">Enter</a>
+      <nav aria-label="Main navigation">
+        <a href="/" data-nav="/">Find a table</a>
+        <a href="/lookup" data-nav="/lookup">My bookings</a>
+        <a href="/login" data-nav="/login" id="account-link">Sign in</a>
       </nav>
       <div class="who" id="who"></div>
     </header>
-    <main id="view"></main>
-    <footer class="colophon">A table is a promise. We keep one.</footer>
+    <section class="agent-demo" id="agent-panel" aria-label="Simulated agents">
+      <p id="agent-status" data-testid="agent-status" role="status">The site is out of API credits. Live agents are unavailable; all three seats are simulated.</p>
+      <p id="agent-details">Coordinator, implementer and reviewer are simulated locally. No external agent API is called for simulated traces. This is not a judged Band run.</p>
+      <div id="agent-trace" data-testid="agent-trace" aria-live="polite" aria-relevant="additions text">
+        <p>Coordinator (simulated): waiting to plan. Implementer (simulated): waiting to act. Reviewer (simulated): waiting to check.</p>
+      </div>
+    </section>
+    <main id="view" tabindex="-1"></main>
+    <footer class="colophon"><span>Nightshift <span aria-hidden="true">✳</span> A table is a promise. We keep one.</span><a href="/lookup">Manage your evening ↗</a></footer>
   </div>
   <script>
     const path = location.pathname;
@@ -223,9 +411,8 @@
       const s = session();
       who.replaceChildren();
       const account = document.getElementById("account-link");
-      if (!s) { account.textContent = "Enter"; account.href = "/login"; return; }
-      account.textContent = "Bookings";
-      account.href = "/lookup";
+      account.hidden = Boolean(s);
+      if (!s) { account.textContent = "Sign in"; account.href = "/login"; return; }
       const name = document.createElement("div");
       name.dataset.testid = "current-user";
       name.textContent = s.display_name;
@@ -243,6 +430,169 @@
       who.append(name, out);
     }
     paintWho();
+
+    // The server replaces only this public mode object. Provider credentials
+    // remain on the server and are never part of the page or browser requests.
+    const initialAgentState = { mode: "simulated", reason: "missing_key" };
+    let agentState = initialAgentState;
+    function paintAgentState(state) {
+      // Credit exhaustion is sticky on the server. An older in-flight live
+      // response can still supply a trace, but cannot reset the current mode.
+      if (agentState.reason === "credits" && state.reason !== "credits") return;
+      agentState = state;
+      const live = state.mode === "live";
+      const status = document.getElementById("agent-status");
+      if (status) status.textContent = live
+        ? "Live agents are configured. Responses will appear after each action."
+        : state.reason === "provider_error"
+          ? "Live agents are temporarily unavailable. All three seats are simulated locally."
+          : "The site is out of API credits. Live agents are unavailable; all three seats are simulated.";
+      const details = document.getElementById("agent-details");
+      if (details) details.textContent = live
+        ? "Coordinator, implementer and reviewer use the configured provider. This is not a judged Band run."
+        : "Coordinator, implementer and reviewer are simulated locally. No external agent API is called for simulated traces. This is not a judged Band run.";
+      document.getElementById("agent-panel")?.setAttribute("aria-label", live ? "Live agents" : "Simulated agents");
+    }
+    paintAgentState(initialAgentState);
+
+    function responseAgentState(response) {
+      try {
+        const encoded = response.headers?.get?.("x-nightshift-agents");
+        if (!encoded) return null;
+        const state = JSON.parse(decodeURIComponent(encoded));
+        if (!state || !["live", "simulated"].includes(state.mode)) return null;
+        if (state.mode === "simulated" && !["missing_key", "credits", "provider_error"].includes(state.reason)) return null;
+        return state;
+      } catch {
+        // Bad or missing agent metadata must never interrupt a booking action.
+        return null;
+      }
+    }
+
+    function observeAgentResponse(response) {
+      const state = responseAgentState(response);
+      if (state) paintAgentState(state);
+      return state;
+    }
+
+    // These deterministic seats describe local booking results, never model output.
+    // Keep only the latest trace per action in this page's memory, without payloads,
+    // credentials, reservation references, persistent storage or logging.
+    let hasAgentTrace = false;
+    function simulateAction(action) {
+      const plans = {
+        search: "search for tables in the local book",
+        book: "book the selected table locally",
+        move: "update the reservation in the local book",
+        cancel: "cancel the reservation in the local book",
+      };
+      const container = document.getElementById("agent-trace");
+      if (!hasAgentTrace) { container.replaceChildren(); hasAgentTrace = true; }
+      [...container.children].find((item) => item.dataset.action === action)?.remove();
+      const group = el("div", "agent-trace");
+      group.dataset.action = action;
+      group.dataset.testid = "agent-trace-" + action;
+      const heading = el("strong", "", action[0].toUpperCase() + action.slice(1) + " · simulated agents");
+      const steps = el("ol");
+      const coordinator = el("li", "", "Coordinator (simulated) — planned: " + plans[action] + ".");
+      const implementer = el("li", "", "Implementer (simulated) — waiting for the local service.");
+      const reviewer = el("li", "", "Reviewer (simulated) — waiting to check the response.");
+      steps.append(coordinator, implementer, reviewer);
+      group.append(heading, steps);
+      container.append(group);
+      let finished = false;
+      return {
+        complete(response, data) {
+          if (finished) return;
+          finished = true;
+          if (!response.ok) {
+            implementer.textContent = "Implementer (simulated) — not completed: the local service refused the " + action + ".";
+            reviewer.textContent = "Reviewer (simulated) — checked: refusal received; no success reported.";
+            return;
+          }
+          const checked = action === "search" ? Array.isArray(data?.slots)
+            : typeof data?.reference === "string" && data.status === (action === "cancel" ? "cancelled" : "confirmed");
+          implementer.textContent = checked
+            ? "Implementer (simulated) — done: " + action + " completed locally."
+            : "Implementer (simulated) — unconfirmed: unexpected local response.";
+          reviewer.textContent = checked
+            ? "Reviewer (simulated) — checked: " + (action === "search" ? "availability returned." : data.status + " reservation returned.")
+            : "Reviewer (simulated) — checked: unexpected response; success could not be verified.";
+        },
+        failed() {
+          if (finished) return;
+          finished = true;
+          implementer.textContent = "Implementer (simulated) — unconfirmed: no usable local response received.";
+          reviewer.textContent = "Reviewer (simulated) — not checked: no usable response; check the booking before retrying.";
+        },
+      };
+    }
+
+    function liveAction(action) {
+      const container = document.getElementById("agent-trace");
+      if (!hasAgentTrace) { container.replaceChildren(); hasAgentTrace = true; }
+      [...container.children].find((item) => item.dataset.action === action)?.remove();
+      const group = el("div", "agent-trace");
+      group.dataset.action = action;
+      group.dataset.testid = "agent-trace-" + action;
+      const title = action[0].toUpperCase() + action.slice(1);
+      const heading = el("strong", "", title + " · waiting for live agents");
+      const steps = el("ol");
+      const roles = ["coordinator", "implementer", "reviewer"];
+      const rows = roles.map((role) => el("li", "", role[0].toUpperCase() + role.slice(1) + " — waiting for the provider response."));
+      steps.append(...rows);
+      group.append(heading, steps);
+      container.append(group);
+      function unconfirmed() {
+        heading.textContent = title + " · agent responses unconfirmed";
+        rows.forEach((row, index) => {
+          const role = roles[index];
+          row.textContent = role[0].toUpperCase() + role.slice(1) + " — unconfirmed: no usable live agent response was received.";
+        });
+      }
+      return {
+        complete(state) {
+          const seats = state?.seats;
+          if (!Array.isArray(seats) || seats.length !== roles.length || !roles.every((role) =>
+            seats.filter((seat) => seat?.role === role && typeof seat.text === "string" && seat.text.trim()).length === 1)) {
+            unconfirmed();
+            return;
+          }
+          heading.textContent = title + " · live agents";
+          rows.forEach((row, index) => {
+            const role = roles[index];
+            row.textContent = role[0].toUpperCase() + role.slice(1) + " (live) — " + seats.find((seat) => seat.role === role).text;
+          });
+        },
+        failed: unconfirmed,
+      };
+    }
+
+    function beginAction(action) {
+      let mode = agentState.mode;
+      let trace = mode === "live" ? liveAction(action) : simulateAction(action);
+      let finished = false;
+      return {
+        complete(response, data) {
+          if (finished) return;
+          finished = true;
+          const state = observeAgentResponse(response);
+          if (state) {
+            if (state.mode !== mode) {
+              mode = state.mode;
+              trace = mode === "live" ? liveAction(action) : simulateAction(action);
+            }
+          }
+          if (mode === "live") trace.complete(state);
+          else trace.complete(response, data);
+        },
+        failed() {
+          if (finished) return;
+          finished = true;
+          trace.failed();
+        },
+      };
+    }
 
     function field(id, testid, label, type, attrs) {
       const wrap = document.createElement("label");
@@ -262,6 +612,7 @@
       el.dataset.testid = test;
       el.className = "banner " + (kind || "bad");
       el.textContent = text;
+      el.setAttribute("role", kind === "ok" ? "status" : "alert");
       return el;
     }
 
@@ -288,7 +639,7 @@
     }
 
     function policyFor(detail, policies, dateStr) {
-      const capacities = {};
+      const capacities = Object.create(null);
       for (const table of detail.tables || []) capacities[table.id] = table.capacity;
       let selected = {
         policy_version: 0,
@@ -354,7 +705,86 @@
     }
 
     async function readJson(res) {
+      // Availability refreshes can consume credits even when they do not
+      // create a visible action trace, so observe every response's mode.
+      observeAgentResponse(res);
       return res.json().catch(() => ({}));
+    }
+
+    function el(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+    function localToday(zone) {
+      const parts = new Intl.DateTimeFormat("en-CA", { timeZone: zone || undefined, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+      return ["year", "month", "day"].map((key) => parts.find((part) => part.type === key).value).join("-");
+    }
+    function safeNext() {
+      const next = new URLSearchParams(location.search).get("next");
+      return next && (next === "/" || /^\/lookup(?:\?|$)/.test(next)) ? next : "/";
+    }
+    function authLink(label, route, next = "/") {
+      const a = el("a", "solid next", label);
+      a.href = route + "?next=" + encodeURIComponent(next);
+      return a;
+    }
+    function readDraft() {
+      try { return JSON.parse(sessionStorage.getItem("nightshift.draft") || "null"); } catch { return null; }
+    }
+    function saveDraft(value) {
+      try { sessionStorage.setItem("nightshift.draft", JSON.stringify(value)); } catch { /* The form still works when storage is unavailable. */ }
+    }
+    async function loadBookingList(container, compact = false) {
+      container.replaceChildren();
+      if (!session()) {
+        if (!compact) {
+          const empty = el("div", "empty-state");
+          empty.append(el("h2", "night", "Your evening, all in one place."), el("p", "quiet", "Sign in to see your reservations, move a table, or change your plans."), authLink("Sign in", "/login", "/lookup"), authLink("Create an account", "/signup", "/lookup"));
+          container.append(empty);
+        }
+        return;
+      }
+      const loading = el("p", "status-line", "Finding your reservations…");
+      container.append(loading);
+      const owner = session()?.user_id;
+      try {
+        const res = await fetch("/reservations", { headers: authHeaders() });
+        const data = await readJson(res);
+        if (owner !== session()?.user_id) return;
+        if (!res.ok) throw new Error(res.status === 401 ? "Your session has ended. Sign in again to see your bookings." : data.error?.message || "We couldn’t load your bookings.");
+        container.replaceChildren();
+        const list = (data.reservations || []).sort((a, b) => (a.status === "cancelled") - (b.status === "cancelled") || a.starts_at_local.localeCompare(b.starts_at_local));
+        if (!list.length) {
+          const empty = el("div", "empty-state");
+          empty.append(el("h2", "night", "An evening to look forward to."), el("p", "quiet", "Your next good evening starts with a reservation."));
+          const a = el("a", "ghost next", "Find a table ↗"); a.href = "/"; empty.append(a);
+          container.append(empty);
+          return;
+        }
+        const cache = new Map();
+        for (const item of (compact ? list.filter((r) => r.status === "confirmed").slice(0, 3) : list)) {
+          if (!cache.has(item.restaurant_id)) cache.set(item.restaurant_id, fetch("/restaurants/" + encodeURIComponent(item.restaurant_id)).then(readJson).catch(() => ({})));
+          const detail = await cache.get(item.restaurant_id);
+          if (owner !== session()?.user_id) return;
+          const labels = new Map((detail.tables || []).map((table) => [table.id, table.label]));
+          const names = (item.table_ids || [item.table_id]).map((id) => labels.get(id) || id).join(" + ");
+          const row = el("article", "ticket mine-row");
+          row.dataset.testid = "booking-card";
+          const state = el("span", "badge", item.status); state.dataset.status = item.status;
+          const title = el("h3", "night", detail.name || "Your reservation");
+          const meta = el("p", "quiet", humanDate(item.starts_at_local.slice(0, 10)) + " · " + clockOf(item.starts_at_local) + " · " + item.party_size + " guests");
+          const reference = el("p", "facts", names + " · Reference " + item.reference);
+          const action = el("a", "ghost next", item.status === "confirmed" ? "Manage booking ↗" : "View booking ↗");
+          action.href = "/lookup?ref=" + encodeURIComponent(item.reference);
+          row.append(state, title, meta, reference, action); container.append(row);
+        }
+      } catch (error) {
+        container.replaceChildren(banner("reservations-error", error.message || "We couldn’t load your bookings. Please try again.", "bad"));
+        const retry = el("button", "ghost next", "Try again"); retry.type = "button"; retry.onclick = () => loadBookingList(container, compact); container.append(retry);
+        container.append(authLink("Sign in", "/login", "/lookup"));
+      }
     }
 
     if (path === "/signup") renderAuth("signup");
@@ -363,33 +793,36 @@
     else renderHome();
 
     function renderAuth(mode) {
+      const layout = el("section", "auth-layout");
+      const intro = el("div", "auth-intro");
+      intro.append(el("p", "eyebrow", "A place at the table"), el("h2", "", "Good company.\nA table with your name on it."), el("p", "lede", "A few details now. An evening to look forward to. Keep all your reservations together, with room for a change of plans."));
       const card = document.createElement("form");
       card.className = "auth-card";
       const h = document.createElement("h1");
-      h.textContent = mode === "signup" ? "Take a name." : "Welcome back.";
+      h.textContent = mode === "signup" ? "Make yourself at home." : "Welcome back.";
       const p = document.createElement("p");
       p.className = "quiet";
-      p.textContent = mode === "signup" ? "A display name is enough. No inbox theatre." : "The book remembers the name on the reservation.";
+      p.textContent = mode === "signup" ? "Create an account to book and manage your tables." : "Sign in to book a table or pick up your plans.";
       card.append(h, p);
-      const email = field("email", mode === "signup" ? "signup-email" : "login-email", "Email", "email", { autocomplete: "username" });
+      const email = field("email", mode === "signup" ? "signup-email" : "login-email", "Email", "email", { autocomplete: "username", required: true });
       const password = field("password", mode === "signup" ? "signup-password" : "login-password", "Password", "password", {
-        autocomplete: mode === "signup" ? "new-password" : "current-password",
+        autocomplete: mode === "signup" ? "new-password" : "current-password", required: true, minLength: mode === "signup" ? 8 : 1,
       });
       card.append(email.wrap, password.wrap);
       let display;
       if (mode === "signup") {
-        display = field("name", "signup-display-name", "Name", "text", { autocomplete: "nickname" });
+        display = field("name", "signup-display-name", "Name", "text", { autocomplete: "name", required: true, maxLength: 100 });
         card.append(display.wrap);
         const hint = document.createElement("p");
         hint.className = "rules hint";
-        hint.textContent = "Use at least 8 characters. The name is what the book shows.";
+        hint.textContent = "Use at least 8 characters for your password.";
         card.append(hint);
       }
       const button = document.createElement("button");
       button.type = "submit";
       button.className = "solid";
       button.dataset.testid = mode === "signup" ? "signup-submit" : "login-submit";
-      button.textContent = mode === "signup" ? "Create account" : "Enter";
+      button.textContent = mode === "signup" ? "Create account" : "Sign in";
       card.append(button);
       const slot = document.createElement("div");
       card.append(slot);
@@ -400,6 +833,7 @@
         const url = mode === "signup" ? "/auth/signup" : "/auth/login";
         if (mode === "signup") payload.display_name = display.input.value;
         button.disabled = true;
+        button.textContent = mode === "signup" ? "Creating account…" : "Signing in…";
         try {
           const res = await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
           const data = await readJson(res);
@@ -411,20 +845,24 @@
           paintWho();
           const go = document.createElement("a");
           go.className = "solid next";
-          go.href = "/";
-          go.textContent = "Search for a table";
-          slot.append(go);
+          go.href = safeNext();
+          go.textContent = safeNext().startsWith("/lookup") ? "Go to my bookings" : readDraft()?.selection ? "Continue your reservation" : "Find a table";
+          slot.append(banner("auth-success", mode === "signup" ? "You’re all set. Welcome to Nightshift." : "You’re signed in. Let’s make an evening of it.", "ok"), go);
+          go.focus();
+          button.hidden = true;
         } catch {
           slot.append(banner("auth-error", "The desk did not answer.", "bad"));
         } finally {
           button.disabled = false;
+          button.textContent = mode === "signup" ? "Create account" : "Sign in";
         }
       });
       const alt = document.createElement("a");
-      alt.href = mode === "signup" ? "/login" : "/signup";
-      alt.textContent = mode === "signup" ? "I already have a name" : "I need an account";
+      alt.href = (mode === "signup" ? "/login" : "/signup") + "?next=" + encodeURIComponent(safeNext());
+      alt.textContent = mode === "signup" ? "Already have an account? Sign in" : "New here? Create an account";
       card.append(alt);
-      view.append(card);
+      layout.append(intro, card);
+      view.append(layout);
     }
 
     function renderHome() {
@@ -432,27 +870,32 @@
       hero.className = "hero";
       const copy = document.createElement("div");
       const h = document.createElement("h1");
-      h.textContent = "Hold a table. Change it. Let it go.";
+      h.textContent = "Good evenings start at a table.";
       const lede = document.createElement("p");
       lede.className = "lede";
-      lede.textContent = "Search the night, book a seat, then change or cancel with the reference. Sending the same request again will not book the table twice.";
-      copy.append(h, lede);
+      lede.textContent = "A window seat for two. A long catch-up with friends. Find a little space for whatever the evening brings.";
+      copy.append(el("p", "eyebrow", "Make room for a good evening"), h, lede);
+      const art = el("div", "hero-art");
+      art.innerHTML = `<svg viewBox="0 0 520 340" role="img" aria-label="An illustrated restaurant with a table for two, a banquette and a round table for friends"><rect x="20" y="18" width="480" height="304" rx="140" fill="#e9e5d9"/><path d="M83 253V90h348v163" fill="none" stroke="#b4ad96" stroke-width="2"/><path d="M116 90h95m24 0h95" stroke="#f7f4ed" stroke-width="8"/><path d="M116 90h95m24 0h95" stroke="#7b8973" stroke-width="2"/><g fill="#9aa18a"><rect x="112" y="134" width="15" height="49" rx="7"/><rect x="208" y="134" width="15" height="49" rx="7"/><rect x="341" y="115" width="60" height="15" rx="7"/><rect x="410" y="157" width="15" height="54" rx="7"/><rect x="341" y="239" width="60" height="15" rx="7"/><rect x="316" y="157" width="15" height="54" rx="7"/></g><rect x="137" y="122" width="61" height="74" rx="20" fill="#79363a"/><circle cx="370" cy="183" r="49" fill="#ba6a4e"/><g fill="#faf4e7" stroke="#dfd2b7" stroke-width="1.5"><circle cx="152" cy="158" r="11"/><circle cx="183" cy="158" r="11"/><circle cx="346" cy="183" r="12"/><circle cx="394" cy="183" r="12"/><circle cx="370" cy="158" r="12"/><circle cx="370" cy="208" r="12"/></g><path d="M130 269h98" stroke="#9aa18a" stroke-width="26" stroke-linecap="round"/><rect x="131" y="227" width="96" height="27" rx="12" fill="#bfaa7a"/><circle cx="155" cy="240" r="9" fill="#faf4e7"/><circle cx="201" cy="240" r="9" fill="#faf4e7"/><g fill="#67735e"><ellipse cx="265" cy="153" rx="8" ry="18" transform="rotate(-35 265 153)"/><ellipse cx="279" cy="159" rx="8" ry="18" transform="rotate(40 279 159)"/><ellipse cx="271" cy="139" rx="7" ry="17"/></g><circle cx="271" cy="172" r="9" fill="#c09372"/><path d="M270 217v28m-14-14h28" stroke="#7c2f2a" stroke-width="1.5"/><path d="M65 65v16m-8-8h16m362 195v16m-8-8h16" stroke="#7c2f2a" stroke-width="1.5"/><text x="260" y="310" text-anchor="middle" fill="#655b4a" font-family="Outfit, sans-serif" font-size="10" letter-spacing="3">THERE’S A PLACE FOR YOU</text></svg>`;
+      hero.append(copy, art);
       const panel = document.createElement("form");
-      panel.className = "panel";
+      panel.className = "panel search-panel";
       panel.addEventListener("submit", (event) => event.preventDefault());
       const fields = document.createElement("div");
       fields.className = "fields";
-      const restaurant = field("restaurant", "restaurant-select", "Restaurant", "select");
-      const date = field("date", "date-input", "Date", "date");
+      const restaurant = field("restaurant", "restaurant-select", "Where", "select", { required: true });
+      const date = field("date", "date-input", "When", "date", { required: true, min: localToday() });
+      const draft = readDraft();
       const soon = new Date();
-      soon.setDate(soon.getDate() + 7);
+      soon.setDate(soon.getDate() + 1);
       date.input.value = `${soon.getFullYear()}-${String(soon.getMonth() + 1).padStart(2, "0")}-${String(soon.getDate()).padStart(2, "0")}`;
-      const party = field("party", "party-size-input", "Party", "number", { min: "1", value: "2" });
+      if (draft?.day >= date.input.min) date.input.value = draft.day;
+      const party = field("party", "party-size-input", "Guests", "number", { min: "1", step: "1", required: true, value: draft?.partySize || "2" });
       const go = document.createElement("button");
       go.type = "submit";
       go.className = "solid";
       go.dataset.testid = "search-button";
-      go.textContent = "Search tables";
+      go.textContent = "Find a table ↗";
       fields.append(restaurant.wrap, date.wrap, party.wrap, go);
       const status = document.createElement("div");
       status.className = "status-line";
@@ -461,23 +904,33 @@
       facts.className = "facts";
       facts.dataset.testid = "restaurant-facts";
       panel.append(fields, status, facts);
-      hero.append(copy, panel);
+
       const results = document.createElement("div");
       results.id = "results";
       const intro = document.createElement("p");
       intro.className = "empty";
-      intro.textContent = "The book is shut until you ask for a night.";
+      intro.textContent = "Finding a place for your evening…";
       results.append(intro);
       const hold = document.createElement("div");
       hold.id = "hold";
       const mine = document.createElement("section");
       mine.id = "mine";
       mine.dataset.testid = "my-reservations";
-      view.append(hero, results, hold, mine);
+      const layout = el("div", "booking-layout");
+      layout.append(results, hold);
+      view.append(hero, panel, layout, mine);
+      function placeholder() {
+        const box = el("aside", "hold-placeholder");
+        box.append(el("p", "eyebrow", "Your evening starts here"), el("h2", "night", "A table worth making time for."), el("p", "quiet", "Choose a time and a table to make it yours."));
+        const promises = el("ul", "promise-list");
+        for (const line of ["Instant confirmation", "Choose your own table", "Room for a change of plans"]) promises.append(el("li", "", line));
+        box.append(promises); hold.replaceChildren(box);
+      }
+      placeholder();
 
       const keys = new Map();
       let gen = 0;
-      let details = {};
+      const details = new Map();
       let last = null;
 
       fetch("/restaurants").then((r) => r.json()).then((data) => {
@@ -488,13 +941,25 @@
           restaurant.input.append(option);
         }
         if (restaurant.input.options.length) {
-          restaurant.input.selectedIndex = 0;
+          restaurant.input.value = [...restaurant.input.options].some((option) => option.value === draft?.restaurantId) ? draft.restaurantId : restaurant.input.options[0].value;
           showFacts();
+          runSearch({ keepForm: false }).then(() => {
+            if (draft?.selection && session() && draft.day >= date.input.min) {
+              const selection = draft.selection;
+              const testid = "slot-" + selection.tableIds.join("+") + "-" + clockOf(selection.local);
+              const available = [...results.querySelectorAll(".cell")].find((button) => button.dataset.testid === testid && !button.disabled);
+              if (available) available.click();
+              else status.textContent = "That table is no longer available. Choose another table for your evening.";
+            }
+          });
         } else {
-          facts.textContent = "No restaurant is on the book yet.";
+          facts.textContent = "Reservations will open soon.";
+          results.replaceChildren(el("div", "empty", "The dining room is getting ready. Please check back soon."));
+          go.disabled = true;
         }
       }).catch(() => {
-        facts.textContent = "The book did not answer.";
+        facts.textContent = "We couldn’t load the restaurants. Refresh the page to try again.";
+        results.replaceChildren(banner("search-error", "The restaurant list is temporarily unavailable.", "bad"));
       });
 
       async function policiesFor(id) {
@@ -516,17 +981,11 @@
           const detail = await loadDetail(id);
           const policies = await policiesFor(id);
           const policy = policyFor(detail, policies, /^\d{4}-\d{2}-\d{2}$/.test(day) ? day : "9999-12-31");
-          const tables = (detail.tables || []).map((table) => {
-            const cap = Number((policy.capacities || {})[table.id] ?? table.capacity);
-            return table.label + " seats " + cap;
-          }).join(" · ");
-          const hours = (policy.opening_hours || []).map((entry) => entry.weekday + " " + entry.opens + "–" + entry.closes).join(", ");
-          const pairs = (detail.combinable || []).map((pair) => pair.map((tid) => {
-            const table = (detail.tables || []).find((item) => item.id === tid);
-            return table ? table.label : tid;
-          }).join(" + "));
-          const when = /^\d{4}-\d{2}-\d{2}$/.test(day) ? " On " + humanDate(day) + ": " : " ";
-          facts.textContent = detail.name + "." + when + tables + ". " + policy.reservation_duration_minutes + " minute seating, every " + policy.slot_minutes + " minutes. " + hours + (pairs.length ? ". Can join: " + pairs.join("; ") + "." : ".");
+          if (id !== restaurant.input.value || day !== date.input.value) return;
+          date.input.min = localToday(detail.timezone);
+          const hours = (policy.opening_hours || []).find((entry) => entry.weekday === weekdayOf(day));
+          facts.textContent = (hours ? "Dinner " + hours.opens + "–" + hours.closes : "Closed on this date") + " · " + policy.reservation_duration_minutes + " minutes at your table · All times in " + detail.timezone.replaceAll("_", " ") + ". " + cutoffPhrase(policy.cancellation_cutoff_minutes);
+
         } catch {
           facts.textContent = "";
         }
@@ -536,17 +995,23 @@
       party.input.addEventListener("input", markStale);
 
       function markStale() {
-        if (!results.querySelector("[data-testid='availability-grid']") && !results.querySelector("[data-testid='no-slots']")) return;
-        status.textContent = "The night or the party changed. Search again to refresh the book.";
+        ++gen;
+        go.disabled = false;
+        saveDraft({ restaurantId: restaurant.input.value, day: date.input.value, partySize: party.input.value });
+        placeholder();
+        results.querySelectorAll(".cell").forEach((button) => { button.disabled = true; });
+        status.textContent = "Plans changed? Find a table to see the latest availability.";
         status.classList.remove("is-loading");
       }
 
       async function loadDetail(id) {
-        if (!details[id]) {
-          const res = await fetch("/restaurants/" + encodeURIComponent(id));
-          details[id] = await res.json();
+        if (!details.has(id)) {
+          details.set(id, fetch("/restaurants/" + encodeURIComponent(id)).then(async (res) => {
+            if (!res.ok) throw new Error("We couldn’t load this restaurant.");
+            return readJson(res);
+          }).catch((error) => { details.delete(id); throw error; }));
         }
-        return details[id];
+        return details.get(id);
       }
 
       function keyFor(body) {
@@ -568,8 +1033,12 @@
           return;
         }
         last = { restaurantId, day, partySize };
-        status.textContent = "Checking the book…";
+        saveDraft(last);
+        status.textContent = "Finding your table…";
+        go.disabled = true;
+        results.setAttribute("aria-busy", "true");
         status.classList.add("is-loading");
+        const trace = keepForm ? null : beginAction("search");
         try {
           const [res, detail, policies] = await Promise.all([
             fetch("/availability?" + new URLSearchParams({
@@ -582,6 +1051,7 @@
             policiesFor(restaurantId),
           ]);
           const data = await readJson(res);
+          trace?.complete(res, data);
           if (my !== gen) return;
           status.classList.remove("is-loading");
           if (!res.ok) {
@@ -589,12 +1059,15 @@
             return;
           }
           status.textContent = "";
-          if (!keepForm) hold.replaceChildren();
+          if (!keepForm) placeholder();
           paintGrid(data, detail, Number(partySize), policies);
         } catch {
+          trace?.failed();
           if (my !== gen) return;
           status.classList.remove("is-loading");
-          status.textContent = "The book did not answer. Try the search again.";
+          status.textContent = "We couldn’t check availability. Please try again.";
+        } finally {
+          if (my === gen) { go.disabled = false; results.removeAttribute("aria-busy"); }
         }
       }
 
@@ -603,22 +1076,36 @@
         const policy = policyFor(detail, policies || [], data.date);
         const night = document.createElement("p");
         night.className = "night";
-        night.textContent = detail.name + " · " + humanDate(data.date);
+        night.textContent = "Your table at " + detail.name;
         const sub = document.createElement("p");
         sub.className = "facts";
-        sub.textContent = "Party of " + partySize + " · " + policy.reservation_duration_minutes + " minute seating · every " + policy.slot_minutes + " minutes.";
-        results.append(night, sub);
-        const slots = data.slots || [];
+        sub.textContent = humanDate(data.date) + " · " + partySize + " guests · " + detail.timezone.replaceAll("_", " ");
+        const heading = el("div", "section-heading");
+        heading.append(el("p", "eyebrow", "Make it a date"), night, sub);
+        results.append(heading);
+        const slots = (data.slots || []).filter((slot) => !slot.starts_at || Date.parse(slot.starts_at) > Date.now());
         if (!slots.length) {
           const empty = document.createElement("div");
           empty.dataset.testid = "no-slots";
           empty.className = "empty";
-          empty.textContent = humanDate(data.date) + " is closed.";
+          empty.textContent = "No seatings on this date. Try another evening.";
           results.append(empty);
           return;
         }
+        const filters = el("div", "time-filters");
+        filters.setAttribute("aria-label", "Filter by seating time");
         const grid = document.createElement("div");
         grid.dataset.testid = "availability-grid";
+        for (const time of ["All times", ...slots.map((slot) => clockOf(slot.starts_at_local))]) {
+          const chip = el("button", "time-chip", time); chip.type = "button";
+          chip.setAttribute("aria-pressed", String(time === "All times"));
+          chip.onclick = () => {
+            filters.querySelectorAll("button").forEach((button) => button.setAttribute("aria-pressed", String(button === chip)));
+            grid.querySelectorAll(".slot-block").forEach((row) => { row.hidden = time !== "All times" && row.dataset.time !== time; });
+          };
+          filters.append(chip);
+        }
+        results.append(filters);
         const labels = new Map((detail.tables || []).map((table) => [table.id, table.label]));
         for (const slot of slots) {
           const block = document.createElement("section");
@@ -626,6 +1113,7 @@
           const title = document.createElement("h2");
           const hhmm = String(slot.starts_at_local).split("T")[1];
           title.textContent = hhmm;
+          block.dataset.time = hhmm;
           const cells = document.createElement("div");
           cells.className = "cells";
           const open = new Set(slot.available_table_ids || []);
@@ -633,7 +1121,7 @@
           for (const table of detail.tables || []) {
             const cap = Number((policy.capacities || {})[table.id] ?? table.capacity);
             const available = open.has(table.id);
-            let kicker = "Open";
+            let kicker = "Available";
             if (!available) {
               const rules = new Map(((explained.get(table.id) || {}).rules || []).map((rule) => [rule.rule, rule.holds]));
               if (rules.get("capacity") === false) kicker = "Too small";
@@ -655,6 +1143,8 @@
                 partySize,
                 capacity: cap,
                 duration: policy.reservation_duration_minutes,
+                timezone: detail.timezone,
+                cutoff: policy.cancellation_cutoff_minutes,
               }),
             }));
           }
@@ -678,6 +1168,8 @@
                 partySize,
                 capacity: Number(option.capacity),
                 duration: policy.reservation_duration_minutes,
+                timezone: detail.timezone,
+                cutoff: policy.cancellation_cutoff_minutes,
               }),
             }));
           }
@@ -693,6 +1185,7 @@
         button.className = "cell" + (spec.combo ? " combo" : "");
         button.dataset.testid = spec.testid;
         button.dataset.available = spec.available ? "true" : "false";
+        button.setAttribute("aria-pressed", "false");
         const small = document.createElement("small");
         small.textContent = spec.kicker;
         const strong = document.createElement("strong");
@@ -703,15 +1196,11 @@
         button.append(small, strong, meta);
         button.addEventListener("click", () => {
           if (button.dataset.available !== "true") return;
-          document.querySelectorAll(".cell.is-selected").forEach((el) => el.classList.remove("is-selected"));
+          document.querySelectorAll(".cell.is-selected").forEach((el) => {
+            el.classList.remove("is-selected"); el.setAttribute("aria-pressed", "false");
+          });
           button.classList.add("is-selected");
-          if (!session()) {
-            const existing = hold.querySelector("[data-testid='auth-error']");
-            if (!existing) hold.append(banner("auth-error", "Sign in before holding a table.", "bad"));
-            return;
-          }
-          const prior = hold.querySelector("[data-testid='auth-error']");
-          if (prior) prior.remove();
+          button.setAttribute("aria-pressed", "true");
           spec.onOpen();
         });
         return button;
@@ -719,29 +1208,38 @@
 
       function openForm(spec) {
         hold.replaceChildren();
+        saveDraft({ ...last, selection: spec });
         const form = document.createElement("form");
         form.dataset.testid = "booking-form";
         form.className = "ticket";
         form.addEventListener("submit", (event) => { event.preventDefault(); submit(); });
         const summary = document.createElement("p");
         summary.dataset.testid = "booking-summary";
+        summary.id = "booking-summary";
+        summary.tabIndex = -1;
         const when = spec.local.replace("T", " ");
-        summary.textContent = (spec.labels.length > 1 ? "Tables " : "Table ") + spec.labels.join(" and ") + " · " + when;
+        summary.textContent = spec.labels.join(" & ") + ", just for you.";
         const row = document.createElement("div");
         row.className = "row";
-        const partyField = field("book-party", "booking-party-size", "Party", "number", { min: "1", value: String(spec.partySize) });
+        const partyField = field("book-party", "booking-party-size", "Guests", "number", { min: "1", max: String(spec.capacity), required: true, step: "1", value: String(spec.partySize) });
         const submitBtn = document.createElement("button");
         submitBtn.type = "submit";
         submitBtn.className = "solid";
         submitBtn.dataset.testid = "booking-submit";
-        submitBtn.textContent = "Hold this table";
+        submitBtn.textContent = "Confirm reservation";
         row.append(partyField.wrap, submitBtn);
         const hint = document.createElement("p");
         hint.className = "rules hint";
         const note = document.createElement("div");
         note.setAttribute("aria-live", "polite");
-        form.append(summary, row, hint, note);
+        form.append(el("p", "eyebrow", "Your reservation"), summary, el("p", "quiet", spec.restaurantName + " · " + humanDate(spec.local.slice(0, 10)) + " · " + clockOf(spec.local)), row, hint, note);
         hold.append(form);
+        form.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        summary.focus({ preventScroll: true });
+        if (!session()) {
+          row.hidden = true;
+          note.append(el("p", "quiet", "Sign in to confirm your table. We’ll keep your selection ready."), authLink("Create an account", "/signup"), authLink("Already a member? Sign in", "/login"));
+        }
         const paintHint = () => {
           const raw = partyField.input.value;
           const count = Number(raw);
@@ -754,13 +1252,15 @@
             hint.textContent = "This seating holds " + spec.capacity + ". A larger party needs another table.";
             return;
           }
-          hint.textContent = "Holds " + spec.capacity + " · " + spec.duration + " minutes · " + spec.local.replace("T", " ") + ".";
+          hint.textContent = "A table for up to " + spec.capacity + " · " + spec.duration + " minutes · " + (spec.timezone || "Restaurant local time").replaceAll("_", " ") + ". " + cutoffPhrase(spec.cutoff);
         };
         partyField.input.addEventListener("input", paintHint);
         paintHint();
 
         let attempt = 0;
+        let confirmed = false;
         async function submit() {
+          if (confirmed || !session() || submitBtn.disabled) return;
           const my = ++attempt;
           const partyValue = Number(partyField.input.value);
           const body = {
@@ -771,6 +1271,8 @@
           if (spec.tableIds.length === 1) body.table_id = spec.tableIds[0];
           else body.table_ids = spec.tableIds;
           submitBtn.disabled = true;
+          submitBtn.textContent = "Reserving your table…";
+          const trace = beginAction("book");
           try {
             const res = await fetch("/reservations", {
               method: "POST",
@@ -778,8 +1280,11 @@
               body: JSON.stringify(body),
             });
             const data = await readJson(res);
+            trace.complete(res, data);
             if (my !== attempt) return;
             if (res.ok) {
+              confirmed = true;
+              keys.delete(JSON.stringify(body));
               showConfirmation(data, spec);
               return;
             }
@@ -787,25 +1292,38 @@
             form.querySelector("[data-testid='booking-uncertain']")?.remove();
             note.querySelector("[data-testid='booking-error']")?.remove();
             note.append(banner("booking-error", data.error?.message || "The table was not held.", "bad"));
+            if (res.status === 401) {
+              clearSession(); paintWho();
+              note.append(authLink("Sign in to continue", "/login"));
+            }
             if (data.error?.code === "table_unavailable") runSearch({ keepForm: true });
           } catch {
+            trace.failed();
             if (my !== attempt) return;
             form.querySelector("[data-testid='confirmation']")?.remove();
             form.querySelector("[data-testid='booking-error']")?.remove();
             note.querySelector("[data-testid='booking-uncertain']")?.remove();
             note.append(banner("booking-uncertain", "No answer came back. The table may already be held. Submit again — the same request will not book it twice.", "unsure"));
           } finally {
-            if (my === attempt) submitBtn.disabled = false;
+            if (my === attempt) {
+              submitBtn.disabled = confirmed;
+              submitBtn.textContent = confirmed ? "Table confirmed ✓" : "Confirm reservation";
+            }
           }
         }
 
         function showConfirmation(data, booked) {
           note.replaceChildren();
+          saveDraft(last);
+          partyField.input.disabled = true;
+          summary.textContent = "You’re on the guest list.";
+          hint.textContent = "We look forward to your evening. Your booking details are saved in My bookings.";
           const box = document.createElement("div");
           box.dataset.testid = "confirmation";
+          box.setAttribute("role", "status");
           const k = document.createElement("p");
           k.className = "quiet";
-          k.textContent = "Reference";
+          k.textContent = "Confirmed · Your booking reference";
           const ref = document.createElement("p");
           ref.className = "ref";
           ref.dataset.testid = "confirmation-reference";
@@ -832,144 +1350,66 @@
       async function refreshMine() {
         mine.replaceChildren();
         if (!session()) return;
-        const heading = document.createElement("h2");
-        heading.className = "section";
-        heading.textContent = "Your bookings";
-        mine.append(heading);
-        let list = [];
-        try {
-          const res = await fetch("/reservations", { headers: authHeaders() });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) {
-            const line = document.createElement("p");
-            line.className = "quiet";
-            line.textContent = data.error?.message || "Your bookings could not be read.";
-            mine.append(line);
-            return;
-          }
-          list = data.reservations || [];
-        } catch {
-          const line = document.createElement("p");
-          line.className = "quiet";
-          line.textContent = "Your bookings could not be read.";
-          mine.append(line);
-          return;
-        }
-        if (!list.length) {
-          const line = document.createElement("p");
-          line.className = "quiet";
-          line.textContent = "Nothing is held under this name.";
-          mine.append(line);
-          return;
-        }
-        for (const item of list) {
-          let place = item.restaurant_id;
-          let tableNames = (item.table_ids || (item.table_id ? [item.table_id] : [])).join(", ");
-          try {
-            const detail = await loadDetail(item.restaurant_id);
-            place = detail.name || place;
-            const labels = new Map((detail.tables || []).map((table) => [table.id, table.label]));
-            const ids = item.table_ids || (item.table_id ? [item.table_id] : []);
-            if (ids.length) tableNames = ids.map((id) => labels.get(id) || id).join(", ");
-          } catch {
-            /* The reference still names the booking when the room card is missing. */
-          }
-          const row = document.createElement("article");
-          row.className = "ticket mine-row";
-          const ref = document.createElement("p");
-          ref.className = "ref ref-sm";
-          ref.textContent = item.reference;
-          const meta = document.createElement("p");
-          meta.textContent = place + " · " + tableNames + " · " + String(item.starts_at_local || "").replace("T", " ") + " · party of " + item.party_size;
-          const state = document.createElement("p");
-          state.className = "badge";
-          state.dataset.status = item.status;
-          state.textContent = item.status;
-          const actions = document.createElement("div");
-          actions.className = "row";
-          const change = document.createElement("a");
-          change.className = "ghost";
-          change.href = "/lookup?ref=" + encodeURIComponent(item.reference);
-          change.textContent = item.status === "confirmed" ? "Change" : "View";
-          actions.append(change);
-          if (item.status === "confirmed") {
-            const cancel = document.createElement("button");
-            cancel.type = "button";
-            cancel.className = "ghost";
-            cancel.textContent = "Cancel";
-            cancel.addEventListener("click", async () => {
-              if (cancel.dataset.armed !== "yes") {
-                cancel.dataset.armed = "yes";
-                cancel.textContent = "Confirm cancel";
-                return;
-              }
-              cancel.disabled = true;
-              try {
-                const done = await fetch("/reservations/" + encodeURIComponent(item.reference) + "/cancel", {
-                  method: "POST",
-                  headers: authHeaders(),
-                });
-                const body = await readJson(done);
-                if (!done.ok) {
-                  meta.textContent = body.error?.message || "The cancellation was refused.";
-                  cancel.disabled = false;
-                  cancel.dataset.armed = "yes";
-                  return;
-                }
-                refreshMine();
-                if (last) runSearch({ keepForm: true });
-              } catch {
-                meta.textContent = "The book did not answer.";
-                cancel.disabled = false;
-              }
-            });
-            actions.append(cancel);
-          }
-          row.append(ref, state, meta, actions);
-          mine.append(row);
-        }
+        mine.append(el("h2", "section", "Your next evenings"));
+        const list = el("div", "booking-list"); mine.append(list);
+        await loadBookingList(list, true);
       }
 
       window.addEventListener("nightshift-session", () => {
-        hold.replaceChildren();
+        placeholder();
         refreshMine();
       });
       refreshMine();
     }
 
     function renderLookup() {
-      const card = document.createElement("section");
-      card.className = "auth-card";
-      const h = document.createElement("h1");
-      h.textContent = "Find the booking.";
-      const ref = field("ref", "lookup-reference-input", "Reference", "text");
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "solid";
+      const card = el("section", "lookup-shell");
+      const heading = el("div", "lookup-heading");
+      heading.append(el("p", "eyebrow", "Plans, with a little flexibility"), el("h1", "", "Your evenings."), el("p", "lede", "The table is booked. The rest is up to you. View your reservations or make a change of plans."));
+      const search = el("form", "lookup-search");
+      const ref = field("ref", "lookup-reference-input", "Have a booking reference?", "text", { placeholder: "e.g. A1B2C3D4", required: true, autocomplete: "off", maxLength: 100 });
+      const button = el("button", "solid", "Find booking");
+      button.type = "submit";
       button.dataset.testid = "lookup-submit";
-      button.textContent = "Look up";
-      const out = document.createElement("div");
-      card.append(h, ref.wrap, button, out);
-      button.addEventListener("click", () => runLookup());
+      const out = el("div", "lookup-content");
+      out.setAttribute("aria-live", "polite");
+      const list = el("div", "booking-list");
+      list.dataset.testid = "my-reservations";
+      search.append(ref.wrap, button);
+      card.append(heading, search, out, list);
+      search.addEventListener("submit", (event) => { event.preventDefault(); runLookup(); });
       view.replaceChildren(card);
+      let lookupGen = 0;
       const preset = new URLSearchParams(location.search).get("ref");
       if (preset) {
         ref.input.value = preset;
         runLookup();
-      }
+      } else loadBookingList(list);
 
       async function runLookup() {
+        const generation = ++lookupGen;
         out.replaceChildren();
+        list.hidden = true;
         const reference = ref.input.value.trim();
+        if (!reference) { list.hidden = false; loadBookingList(list); return; }
+        button.disabled = true;
+        button.textContent = "Finding booking…";
         if (!session()) {
-          out.append(banner("reservation-error", "Sign in to read a reservation.", "bad"));
+          out.append(el("div", "empty", "Sign in to see the details of your reservation."), authLink("Sign in", "/login", "/lookup?ref=" + encodeURIComponent(reference)));
+          button.disabled = false; button.textContent = "Find booking";
           return;
         }
         try {
           const res = await fetch("/reservations/" + encodeURIComponent(reference), { headers: authHeaders() });
           const data = await readJson(res);
+          if (generation !== lookupGen) return;
           if (!res.ok) {
             out.append(banner("reservation-error", data.error?.message || "No reservation under that reference.", "bad"));
+            if (res.status === 401) {
+              clearSession();
+              paintWho();
+              out.append(authLink("Sign in to see your booking", "/login", "/lookup?ref=" + encodeURIComponent(reference)));
+            }
             return;
           }
           const [detailRes, policyRes, historyRes] = await Promise.all([
@@ -980,44 +1420,67 @@
           const detail = detailRes.ok ? await readJson(detailRes) : { tables: [], name: data.restaurant_id, combinable: [] };
           const policyBody = policyRes.ok ? await readJson(policyRes) : {};
           const historyBody = historyRes.ok ? await readJson(historyRes) : {};
+          if (generation !== lookupGen) return;
+          history.replaceState(null, "", "/lookup?ref=" + encodeURIComponent(data.reference));
           paintDetail(data, detail, policyBody.policies || [], historyBody.entries || []);
         } catch {
-          out.append(banner("reservation-error", "The book did not answer.", "bad"));
+          if (generation === lookupGen) out.append(banner("reservation-error", "We couldn’t reach the restaurant. Please try again.", "bad"));
+        } finally {
+          if (generation === lookupGen) { button.disabled = false; button.textContent = "Find booking"; }
         }
       }
 
       function paintDetail(data, detail, policies, entries) {
         out.replaceChildren();
         let current = data;
+        let mutationPending = false;
         const labels = new Map((detail.tables || []).map((table) => [table.id, table.label]));
         const idsOf = (res) => res.table_ids || (res.table_id ? [res.table_id] : []);
         const namesOf = (res) => idsOf(res).map((id) => labels.get(id) || id);
         const box = document.createElement("div");
+        box.className = "reservation-sheet";
         box.dataset.testid = "reservation-detail";
+        function lockMutation(pending) {
+          mutationPending = pending;
+          box.querySelectorAll("button, input, select").forEach((control) => { control.disabled = pending; });
+        }
+        const back = el("a", "back-link", "← All your bookings"); back.href = "/lookup";
+        box.append(back, el("p", "eyebrow", "Reservation " + data.reference), el("h2", "night", detail.name || "Your reservation"));
         const status = document.createElement("p");
         status.dataset.testid = "reservation-status";
+        status.className = "badge";
+        status.dataset.status = current.status;
         status.textContent = current.status;
         const tables = document.createElement("p");
         tables.dataset.testid = "reservation-tables";
         tables.textContent = namesOf(current).join(", ");
         const meta = document.createElement("p");
         const writeMeta = () => {
-          meta.textContent = (detail.name || current.restaurant_id) + " · " + String(current.starts_at_local || "").replace("T", " ") + " · party of " + current.party_size;
+          meta.textContent = humanDate(String(current.starts_at_local || "").slice(0, 10)) + " · " + clockOf(current.starts_at_local) + " · " + current.party_size + " guests · " + (detail.timezone || "Restaurant local time").replaceAll("_", " ");
         };
         writeMeta();
         box.append(status, tables, meta);
-        if (entries && entries.length) {
-          const historyList = document.createElement("ul");
-          historyList.className = "history";
-          for (const entry of entries) {
-            const li = document.createElement("li");
-            const bits = entry.changes?.length
-              ? entry.changes.map((change) => change.field + " → " + (Array.isArray(change.to) ? change.to.join("+") : change.to)).join(", ")
-              : "";
-            li.textContent = entry.event + (bits ? " · " + bits : "");
-            historyList.append(li);
-          }
-          box.append(historyList);
+        const policyNote = el("p", "rules");
+        function updateTerms() {
+          policyNote.textContent = cutoffPhrase(current.accepted_terms?.cancellation_cutoff_minutes ?? detail.cancellation_cutoff_minutes);
+        }
+        updateTerms();
+        box.append(policyNote);
+        const historyDetails = el("details", "booking-history");
+        const historyList = el("ul", "history");
+        historyDetails.append(el("summary", "", "Reservation history"), historyList);
+        const friendlyEvents = { created: "Table confirmed", changed: "Reservation updated", cancelled: "Reservation cancelled", moved: "Table moved", replanned: "Seating updated" };
+        function updateHistory(items) {
+          historyList.replaceChildren();
+          for (const entry of items) historyList.append(el("li", "", friendlyEvents[entry.event] || "Reservation updated"));
+        }
+        updateHistory(entries || []);
+        if (entries?.length) box.append(historyDetails);
+        async function refreshHistory() {
+          try {
+            const response = await fetch("/reservations/" + encodeURIComponent(current.reference) + "/history", { headers: authHeaders() });
+            if (response.ok) updateHistory((await readJson(response)).entries || []);
+          } catch { /* Booking confirmation remains valid if history is unavailable. */ }
         }
 
         const changeForm = document.createElement("form");
@@ -1028,7 +1491,7 @@
           saveChange();
         });
         const changeTitle = document.createElement("p");
-        changeTitle.className = "quiet";
+        changeTitle.className = "night";
         const rules = document.createElement("p");
         rules.className = "rules";
         rules.dataset.testid = "change-rules";
@@ -1036,21 +1499,22 @@
         grid.className = "change-grid";
         const initialLocal = String(current.starts_at_local || "");
         const partyField = field("change-party", "change-party-size", "Party", "number", {
-          min: "1", step: "1", value: String(current.party_size),
+          min: "1", step: "1", required: true, value: String(current.party_size),
         });
-        const dateField = field("change-date", "change-date", "Date", "date", { value: initialLocal.slice(0, 10) });
+        const dateField = field("change-date", "change-date", "Date", "date", { value: initialLocal.slice(0, 10), required: true, min: localToday(detail.timezone) });
         const timeField = field("change-time", "change-time", "Time", "select");
         grid.append(partyField.wrap, dateField.wrap, timeField.wrap);
         const seats = document.createElement("div");
         seats.className = "cells";
         seats.dataset.testid = "change-seats";
         const note = document.createElement("div");
+        note.setAttribute("aria-live", "polite");
         const save = document.createElement("button");
         save.type = "submit";
         save.className = "solid";
         save.dataset.testid = "change-submit";
-        save.textContent = "Save change";
-        changeForm.append(changeTitle, rules, grid, seats, save, note);
+        save.textContent = "Save changes";
+        changeForm.append(el("p", "eyebrow", "A change of plans"), changeTitle, rules, grid, seats, save, note);
 
         if (current.status === "confirmed") {
           const cancel = document.createElement("button");
@@ -1058,31 +1522,54 @@
           cancel.className = "ghost";
           cancel.dataset.testid = "reservation-cancel-button";
           cancel.textContent = "Cancel reservation";
+          const cancelRow = el("div", "cancel-row");
+          const keep = el("button", "ghost", "Keep reservation"); keep.type = "button"; keep.hidden = true;
+          const cancelNote = el("p", "rules", ""); cancelNote.hidden = true;
+          keep.onclick = () => { cancel.dataset.armed = ""; cancel.textContent = "Cancel reservation"; keep.hidden = true; cancelNote.hidden = true; };
+          cancelRow.append(cancel, keep, cancelNote);
           cancel.addEventListener("click", async () => {
-            cancel.disabled = true;
+            if (mutationPending) return;
+            if (cancel.dataset.armed !== "yes") {
+              cancel.dataset.armed = "yes"; cancel.textContent = "Yes, cancel reservation"; keep.hidden = false; cancelNote.hidden = false;
+              cancelNote.textContent = "Release this table? You can make a new reservation any time.";
+              return;
+            }
+            lockMutation(true);
+            const trace = beginAction("cancel");
             try {
               const done = await fetch("/reservations/" + encodeURIComponent(current.reference) + "/cancel", {
                 method: "POST",
                 headers: authHeaders(),
               });
               const body = await readJson(done);
+              trace.complete(done, body);
               if (!done.ok) {
                 out.append(banner("reservation-error", body.error?.message || "The cancellation was refused.", "bad"));
                 cancel.disabled = false;
+                keep.disabled = false;
                 return;
               }
               current = body;
               status.textContent = body.status;
+              status.dataset.status = body.status;
               tables.textContent = namesOf(body).join(", ");
               writeMeta();
-              cancel.remove();
+              cancelRow.remove();
               changeForm.remove();
+              box.append(banner("cancellation-confirmed", "Reservation cancelled. Your table has been released. We’ll save you a seat another evening.", "ok"));
+              const again = el("a", "solid next", "Plan another evening ↗"); again.href = "/"; box.append(again);
+              refreshHistory();
             } catch {
+              trace.failed();
               out.append(banner("reservation-error", "The book did not answer.", "bad"));
               cancel.disabled = false;
+              keep.disabled = false;
+            } finally {
+              lockMutation(false);
+              if (current.status === "confirmed") paintChange();
             }
           });
-          box.append(cancel, changeForm);
+          box.append(changeForm, cancelRow);
         }
         out.append(box);
 
@@ -1090,6 +1577,7 @@
         let avail = null;
         let availKey = "";
         let availGen = 0;
+        let availabilityFailed = false;
 
         function selectedPolicy() {
           return policyFor(detail, policies, dateField.input.value);
@@ -1127,14 +1615,15 @@
           setTimeOptions(timesFor(policy, day), timeField.input.value || initialLocal.slice(11, 16));
           const when = localStamp();
           rules.textContent = /^\d{4}-\d{2}-\d{2}$/.test(day)
-            ? "Seat counts follow the house rules for " + humanDate(day) + " · " + policy.reservation_duration_minutes + " minute seating · " + policy.slot_minutes + " minute grid."
-            : "Choose a date to see the seat counts for that night.";
+            ? "Choose a new date, time or table. Your current reservation stays held until you save. Availability is checked again when saving."
+            : "Choose a date to find your next table.";
           const names = (chosen || []).map((id) => labels.get(id) || id);
-          changeTitle.textContent = (names.length ? names.join(" and ") : "Choose a table") + (when.length > 11 ? " · " + when : "");
+          changeTitle.textContent = "Make the evening yours.";
           const slot = avail && availKey === day + "|" + partyRaw
             ? (avail.slots || []).find((entry) => String(entry.starts_at_local).slice(11, 16) === timeField.input.value)
             : null;
           const waiting = availKey !== day + "|" + partyRaw;
+          save.disabled = true;
           const open = new Set(slot ? slot.available_table_ids || [] : []);
           const combos = new Set((slot?.available_options || []).map((option) => (option.table_ids || []).join("\0")));
           const owned = (!waiting && when === current.starts_at_local) ? new Set(idsOf(current)) : new Set();
@@ -1150,6 +1639,7 @@
               overlapsOwn = a0 < b1 && b0 < a1;
             }
           }
+          if (overlapsOwn) ownIds.forEach((id) => owned.add(id));
           seats.replaceChildren();
           const options = [];
           for (const table of detail.tables || []) options.push([table.id]);
@@ -1163,7 +1653,9 @@
               ? open.has(ids[0]) || owned.has(ids[0])
               : ids.every((id) => owned.has(id)) || combos.has(ids.join("\0")) || ids.every((id) => open.has(id) || owned.has(id));
             const heldByUs = overlapsOwn && ids.every((id) => ownIds.includes(id));
-            const free = !waiting && !tooSmall && (marked || heldByUs);
+            const future = day >= dateField.input.min && slot && (!slot.starts_at || Date.parse(slot.starts_at) > Date.now());
+            const free = Boolean(!mutationPending && !waiting && future && !tooSmall && (marked || heldByUs));
+            if (free && sameMembers(ids, chosen)) save.disabled = false;
             const button = document.createElement("button");
             button.type = "button";
             button.className = "cell" + (ids.length > 1 ? " combo" : "");
@@ -1171,8 +1663,11 @@
             button.dataset.available = free ? "true" : "false";
             button.dataset.capacity = String(cap);
             if (sameMembers(ids, chosen)) button.classList.add("is-selected");
+            button.setAttribute("aria-pressed", String(sameMembers(ids, chosen)));
             const kicker = document.createElement("small");
-            kicker.textContent = waiting ? "Checking" : tooSmall ? "Too small" : free ? (heldByUs && !marked ? "Your table" : "Open") : "Taken";
+            const usesHeldTable = ids.some((id) => owned.has(id));
+            kicker.textContent = waiting ? "Checking" : availabilityFailed ? "Unavailable" : tooSmall ? "Too small"
+              : free ? (usesHeldTable ? (when === current.starts_at_local ? "Your table" : "Check on save") : "Open") : "Taken";
             const strong = document.createElement("strong");
             strong.textContent = ids.map((id) => labels.get(id) || id).join(" + ");
             const capLabel = document.createElement("small");
@@ -1192,17 +1687,23 @@
         async function refreshAvailability() {
           const day = dateField.input.value;
           const partyRaw = partyField.input.value;
+          const my = ++availGen;
+          availKey = "";
+          availabilityFailed = false;
+          note.querySelector("[data-testid='change-availability-error']")?.remove();
           paintChange();
           if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !/^(0|[1-9][0-9]*)$/.test(partyRaw)) return;
-          const my = ++availGen;
           try {
             const res = await fetch("/availability?" + new URLSearchParams({
               restaurant_id: current.restaurant_id,
               date: day,
-              party_size: partyRaw,
+              // Read every free physical table; party capacity is applied above.
+              // This also allows joining our held table to a smaller free table.
+              party_size: "1",
             }));
             const body = await readJson(res);
             if (my !== availGen) return;
+            if (!res.ok) showAvailabilityError();
             avail = res.ok ? body : { slots: [] };
             availKey = day + "|" + partyRaw;
             const fromApi = (avail.slots || []).map((slot) => String(slot.starts_at_local).slice(11, 16));
@@ -1210,10 +1711,22 @@
             paintChange();
           } catch {
             if (my !== availGen) return;
+            showAvailabilityError();
             avail = { slots: [] };
             availKey = day + "|" + partyRaw;
             paintChange();
           }
+        }
+
+        function showAvailabilityError() {
+          availabilityFailed = true;
+          const message = banner("change-availability-error", "We couldn’t check available tables. Your reservation is unchanged.", "bad");
+          const retry = el("button", "ghost next", "Try again");
+          retry.type = "button";
+          retry.dataset.testid = "change-availability-retry";
+          retry.onclick = () => refreshAvailability();
+          message.append(retry);
+          note.append(message);
         }
 
         function follow() { refreshAvailability(); }
@@ -1224,6 +1737,7 @@
         if (current.status === "confirmed") follow();
 
         async function saveChange() {
+          if (save.disabled || mutationPending) return;
           note.replaceChildren();
           if (current.status !== "confirmed") {
             note.append(banner("change-error", "This reservation is cancelled.", "bad"));
@@ -1247,7 +1761,9 @@
           if (Number.isInteger(current.revision)) body.expected_revision = current.revision;
           if (chosen.length === 1) body.table_id = chosen[0];
           else body.table_ids = chosen.slice();
-          save.disabled = true;
+          lockMutation(true);
+          save.textContent = "Saving changes…";
+          const trace = beginAction("move");
           try {
             const res = await fetch("/reservations/" + encodeURIComponent(current.reference), {
               method: "PATCH",
@@ -1255,30 +1771,44 @@
               body: JSON.stringify(body),
             });
             const saved = await readJson(res);
+            trace.complete(res, saved);
             if (!res.ok) {
               note.append(banner("change-error", saved.error?.message || "The change was refused.", "bad"));
               if (saved.error?.code === "stale_revision") {
                 const again = await fetch("/reservations/" + encodeURIComponent(current.reference), { headers: authHeaders() });
                 const fresh = await readJson(again);
-                if (again.ok) current = fresh;
+                if (again.ok) {
+                  current = fresh;
+                  status.textContent = fresh.status; status.dataset.status = fresh.status;
+                  tables.textContent = namesOf(fresh).join(", "); writeMeta();
+                  updateTerms();
+                  refreshHistory();
+                }
               }
+              availKey = ""; follow();
               return;
             }
             current = saved;
             chosen = idsOf(saved).slice();
             status.textContent = saved.status;
+            status.dataset.status = saved.status;
+            updateTerms();
+            refreshHistory();
             tables.textContent = namesOf(saved).join(", ");
             writeMeta();
             partyField.input.value = String(saved.party_size);
             dateField.input.value = String(saved.starts_at_local || "").slice(0, 10);
             setTimeOptions(timesFor(selectedPolicy(), dateField.input.value), String(saved.starts_at_local || "").slice(11, 16));
-            note.append(banner("change-saved", "The booking now matches what you asked for.", "ok"));
+            note.append(banner("change-saved", "Your plans are updated. We’ll see you at " + clockOf(saved.starts_at_local) + ".", "ok"));
             availKey = "";
             follow();
           } catch {
-            note.append(banner("change-error", "No answer came back. Nothing was confirmed. Save again.", "unsure"));
+            trace.failed();
+            note.append(banner("change-error", "We couldn’t confirm the response. Your change may have been saved. Check this reservation before trying again.", "unsure"));
           } finally {
-            save.disabled = false;
+            lockMutation(false);
+            save.textContent = "Save changes";
+            paintChange();
           }
         }
       }

@@ -1,0 +1,11 @@
+This is Tablekeeper. A reservation starts with a search.
+
+Maya opens the app and looks for a table near her. She sets the time, the party size, and the place. The open tables come back on the screen, and she chooses the one that fits.
+
+She books it. The table she picked stays selected while she signs in. The reservation is confirmed, and the evening is set. There is no reference code to chase later. The booking sits in her list, ready to open.
+
+Plans change. She opens that same booking and moves it. The screen shows only the tables that are actually free. She picks a better time, and the confirmation comes straight back. The old table is released. The new one is held. No phone call. No mix-up.
+
+Then the night is called off. She cancels the reservation, and the app asks her to confirm. She can still keep it if she changes her mind. Once she confirms, the restaurant is updated and the table is free again.
+
+Search. Book. Move. Cancel. Tablekeeper keeps every reservation clear, calm, and under control.

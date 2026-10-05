@@ -2,6 +2,11 @@
   "name": "nightshift-tablekeeper",
   "private": true,
   "type": "module",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "demo": "DEMO=1 node src/server.mjs",
+    "test": "node --test ../tests/identifier-maps.test.mjs ../tests/stage-4-demo.test.mjs ../tests/stage-4-booking-guards.test.mjs ../tests/stage-4-ui.test.mjs tests/*.test.mjs"
+  },
   "dependencies": {
     "luxon": "3.7.2"
   }

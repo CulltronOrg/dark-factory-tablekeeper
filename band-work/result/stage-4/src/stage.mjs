@@ -1,12 +1,7 @@
 export const STAGE = 4;
 
-// Ash's key slot, 4 Oct 2026. Empty until he sets BAND_API_KEY.
-// Do not invent a key, open an account, or send this value anywhere.
-const bandApiKey = process.env.BAND_API_KEY;
-export const ASH_KEY_SLOT = Object.freeze({
-  env: "BAND_API_KEY",
-  value: typeof bandApiKey === "string" ? bandApiKey : "",
-});
+// Reservation rules run locally in both agent modes. The server's agent adapter
+// reads provider configuration from the environment and labels simulated seats.
 
 // Stage 4 keeps every earlier route and adds seating replans plus series amend.
 // Search, book, change, and cancel stay the diner API. Only booking is idempotent

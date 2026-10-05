@@ -36,7 +36,9 @@ Stages 2, 3 and 4 also serve the Nightshift UI at `/`, `/login`, `/signup` and `
 
 ## Checks that were actually run
 
-Host-mode checks against the official harness are recorded under `../checks/` when present (that directory is not part of the submission). The reports for the current tree are `after-edges-s4`, `after-edges-s1`, `after-edges-s2-overshoot` and `after-edges-s3-overshoot`. Earlier directories in that folder are older engine revisions. Re-run from a checkout of the challenge repo. Stages 2 and later need the previous stage's base URL:
+After `npm ci` in each stage folder, run `node tests/identifier-maps.test.mjs` from this directory for 16 local regression checks. They use public routes and empty-user fixtures to verify unknown IDs and reserved restaurant/table IDs through reset and export/import, without credentials.
+
+Host-mode checks against the official harness are recorded under `../checks/` when present (that directory is not part of the submission). The `rerun-20261004` and later `castle-01/host-0215` runs each record stages 1–4 passing 120/120, 25/25, 7/7 and 6/6 published tests. Both predate the 4 October dictionary fix, which has only focused local checks. Their `claimed_stage` is null because they used `--base-url`; neither is an isolated or judged result. The earlier `after-edges-s4`, `after-edges-s1`, `after-edges-s2-overshoot` and `after-edges-s3-overshoot` reports document preceding host checks and stage boundaries. Other older directories are from earlier engine revisions. Re-run from a checkout of the challenge repo. Stages 2 and later need the previous stage's base URL:
 
 ```sh
 python -m harness run --track tablekeeper --base-url http://127.0.0.1:8080 --previous-base-url http://127.0.0.1:8083 --stages 1 2 3 4 --out /tmp/nightshift-stage4

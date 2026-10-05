@@ -1,15 +1,8 @@
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { createService } from "./engine.mjs";
-import { ASH_KEY_SLOT, HTTP_API, STAGE, pathEncodingError, queryFromSearch } from "./stage.mjs";
-
-// Ash's slot is only the BAND_API_KEY environment variable, 4 Oct 2026.
-// A literal key written into stage.mjs does not match an unset or different
-// environment value, so the process refuses to start. Nothing reads the slot
-// while serving a request, and the process makes no outbound call with it.
-if (ASH_KEY_SLOT.env !== "BAND_API_KEY" || ASH_KEY_SLOT.value !== (process.env.BAND_API_KEY ?? "")) {
-  throw new Error("Ash key slot is misconfigured");
-}
+import { createAgents, renderAgentPage, reservationAction } from "./agents.mjs";
+import { HTTP_API, STAGE, pathEncodingError, queryFromSearch } from "./stage.mjs";
 
 if (STAGE !== 4
   || HTTP_API.search.method !== "GET" || HTTP_API.search.path !== "/availability" || HTTP_API.search.idempotency !== false
@@ -28,6 +21,7 @@ if (STAGE !== 4
 }
 
 const service = createService(STAGE);
+const agents = createAgents();
 if (process.env.DEMO === "1") {
   const days = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].map((weekday) => ({
     weekday, opens: "17:00", closes: "23:00",
@@ -78,13 +72,14 @@ function plainHeaders(headers) {
   return out;
 }
 
-function sendJson(res, status, payload) {
+function sendJson(res, status, payload, headers = {}) {
   if (res.writableEnded || res.destroyed) return;
   const body = Buffer.from(JSON.stringify(payload));
   res.writeHead(status, {
     "content-type": "application/json; charset=utf-8",
     "content-length": body.length,
     "cache-control": "no-store",
+    ...headers,
   });
   res.end(body);
 }
@@ -110,7 +105,7 @@ const server = createServer(async (req, res) => {
       return;
     }
     if (STAGE >= 2 && req.method === "GET" && HTTP_API.pages.includes(url.pathname)) {
-      const body = Buffer.from(page);
+      const body = Buffer.from(renderAgentPage(page, agents.state()));
       res.writeHead(200, {
         "content-type": "text/html; charset=utf-8",
         "content-length": body.length,
@@ -122,6 +117,16 @@ const server = createServer(async (req, res) => {
     if (pathEncodingError(url.pathname)) {
       sendJson(res, 400, { error: { code: "malformed_request", message: "The request URL is not valid" } });
       return;
+    }
+    if (process.env.DISABLE_TEST_ROUTES === "1") {
+      // Public hosting: harness-only routes are hidden. Internal demo seeding
+      // calls the service directly and is unaffected.
+      let decoded = url.pathname;
+      try { decoded = decodeURIComponent(url.pathname); } catch { /* checked above */ }
+      if (decoded.toLowerCase().replace(/\/+/g, "/").startsWith("/_test")) {
+        sendJson(res, 404, { error: { code: "not_found", message: "No such resource" } });
+        return;
+      }
     }
     const query = queryFromSearch(url.search);
     const result = await exclusively(() => service.handle(
@@ -137,7 +142,10 @@ const server = createServer(async (req, res) => {
       res.end();
       return;
     }
-    sendJson(res, result.status, result.body);
+    const action = reservationAction(req.method, url.pathname);
+    const agentTrace = action ? await agents.run(action, result) : null;
+    sendJson(res, result.status, result.body, agentTrace
+      ? { "x-nightshift-agents": encodeURIComponent(JSON.stringify(agentTrace)) } : {});
   } catch (error) {
     const tooLarge = error && error.code === "body_too_large";
     if (!tooLarge) console.error(error);
@@ -179,4 +187,3 @@ const port = Number(process.env.PORT || 8080);
 server.listen(port, "0.0.0.0", () => {
   console.log(`listening on ${port}`);
 });
-
